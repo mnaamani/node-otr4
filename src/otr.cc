@@ -49,6 +49,7 @@ void RegisterModule(v8::Handle<v8::Object> target) {
 
   otr::UserState::Init(target);
   otr::ConnectionCtx::Init(target);
+  otr::MessageAppOps::Init(target);
 }
 
 

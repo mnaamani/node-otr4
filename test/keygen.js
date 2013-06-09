@@ -11,24 +11,27 @@ var alice_settings ={
     accountname:"alice@telechat.org",
     protocol:"telechat"
 };
+var bob_settings ={
+    keys:keys_dir+'/bob.keys',
+    fingerprints:keys_dir+'/bob.fp',
+    instags:keys_dir+'/bob.instags',
+    accountname:"bob@telechat.org",
+    protocol:"telechat"
+};
 
 
 var alice = new otr.User(alice_settings);
-console.log("MessagePoll Default Interval:",alice.getMessagePollDefaultInterval());
-alice.messagePoll();
 alice.name = "Alice";
+var bob = new otr.User(bob_settings);
+bob.name = "Bob";
 
 make_key_for_user(alice,alice_settings.accountname,alice_settings.protocol);
 make_instag_for_user(alice,alice_settings.accountname,alice_settings.protocol);
-
-var BOB = alice.ConnContext("alice@telechat.org","telechat","BOB");
-console.log(BOB.accountname);
-BOB = BOB.master;
-console.log(BOB.accountname);
+make_key_for_user(bob,bob_settings.accountname,bob_settings.protocol);
+make_instag_for_user(bob,bob_settings.accountname,bob_settings.protocol);
 
 function make_key_for_user(user,accountname,protocol){
     if( user.findKey(accountname,protocol) ) return;
-
     console.log("creating a new key for:",user.name,accountname,protocol);
     user.generateKey(accountname,protocol,function(err,key){
         if(err){
