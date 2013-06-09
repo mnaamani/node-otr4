@@ -21,6 +21,11 @@ alice.name = "Alice";
 make_key_for_user(alice,alice_settings.accountname,alice_settings.protocol);
 make_instag_for_user(alice,alice_settings.accountname,alice_settings.protocol);
 
+var BOB = alice.ConnContext("alice@telechat.org","telechat","BOB");
+console.log(BOB.accountname);
+BOB = BOB.master;
+console.log(BOB.accountname);
+
 function make_key_for_user(user,accountname,protocol){
     if( user.findKey(accountname,protocol) ) return;
 

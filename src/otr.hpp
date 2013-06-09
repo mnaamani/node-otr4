@@ -28,6 +28,7 @@
 #include <string>
 
 #include "userstate.hpp"
+#include "context.hpp"
 
 #define GCRY_EXCEPTION(error) v8::ThrowException(v8::Exception::Error(v8::String::New(gcry_strerror(error))))
 #define V8EXCEPTION(error) v8::ThrowException(v8::Exception::Error(v8::String::New(error)))

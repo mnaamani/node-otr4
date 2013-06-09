@@ -29,6 +29,7 @@ var events = require('events');
 
 exports.version = otr.version;
 exports.UserState = otr.UserState;
+exports.ConnContext = otr.ConnContext;
 
 exports.User = User;
 

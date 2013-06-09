@@ -48,6 +48,7 @@ void RegisterModule(v8::Handle<v8::Object> target) {
   target->Set(v8::String::NewSymbol("version"), v8::FunctionTemplate::New(otr::Version)->GetFunction());
 
   otr::UserState::Init(target);
+  otr::ConnectionCtx::Init(target);
 }
 
 
