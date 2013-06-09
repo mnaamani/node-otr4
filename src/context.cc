@@ -1,6 +1,6 @@
 /*
  *  Off-the-Record Messaging bindings for nodejs
- *  Copyright (C) 2012  Mokhtar Naamani,
+ *  Copyright (C) 2013  Mokhtar Naamani,
  *                      <mokhtar.naamani@gmail.com>
  *
  *  This program is free software; you can redistribute it and/or modify
