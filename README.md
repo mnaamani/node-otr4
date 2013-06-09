@@ -1,7 +1,7 @@
-## OTR3 - Off-the-Record Messaging [native-bindings]
+## OTR4 - Off-the-Record Messaging [native-bindings]
 
 This module exposes a simple evented API which wraps the native libotr installed.
-Supports only versions v4.0.0 of the library.
+Supports only versions **v4.0.0** of the library.
 
 Only tested on Debian/Ubuntu. (If you can help to make it build on windows please do).
 
