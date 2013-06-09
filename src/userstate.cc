@@ -60,17 +60,24 @@ void UserState::Init(Handle<Object> target) {
 
   NODE_SET_PROTOTYPE_METHOD(constructor, "fingerprint",GetFingerprint);
   NODE_SET_PROTOTYPE_METHOD(constructor, "accounts",Accounts);
+
   NODE_SET_PROTOTYPE_METHOD(constructor, "readKeysSync",Read_Keys_Sync);
   NODE_SET_PROTOTYPE_METHOD(constructor, "writeKeysSync",Write_Keys_Sync);
   NODE_SET_PROTOTYPE_METHOD(constructor, "deleteKeyOnFile",Delete_Key_On_File);
   NODE_SET_PROTOTYPE_METHOD(constructor, "findKey",Find_Key);
-  NODE_SET_PROTOTYPE_METHOD(constructor, "readFingerprintsSync",Read_Fingerprints_Sync);
+
   NODE_SET_PROTOTYPE_METHOD(constructor, "readInstagsSync",Read_Instags_Sync);
   NODE_SET_PROTOTYPE_METHOD(constructor, "writeInstagsSync",Write_Instags_Sync);
   NODE_SET_PROTOTYPE_METHOD(constructor, "generateInstag",Generate_Instag);
   NODE_SET_PROTOTYPE_METHOD(constructor, "findInstag",Find_Instag);
+
+  NODE_SET_PROTOTYPE_METHOD(constructor, "readFingerprintsSync",Read_Fingerprints_Sync);
   NODE_SET_PROTOTYPE_METHOD(constructor, "writeFingerprintsSync",Write_Fingerprints_Sync);
   NODE_SET_PROTOTYPE_METHOD(constructor, "writeTrustedFingerprintsSync",Write_Trusted_Fingerprints_Sync);
+
+  NODE_SET_PROTOTYPE_METHOD(constructor, "getMessagePollDefaultInterval",MessagePoll_DefaultInterval);
+  NODE_SET_PROTOTYPE_METHOD(constructor, "messagePoll",MessagePoll);
+
   NODE_SET_PROTOTYPE_METHOD(constructor, "free",Free);
 
   target->Set(name, constructor->GetFunction());
@@ -100,6 +107,24 @@ Handle<Value> UserState::WrapUserState(OtrlUserState userstate)
         obj->userstate_ = userstate;
         obj->reference = true;
         return o;
+}
+
+Handle<Value> UserState::MessagePoll_DefaultInterval(const Arguments& args) {
+  HandleScope scope;
+  UserState* obj = ObjectWrap::Unwrap<UserState>(args.This());
+
+  int interval = otrl_message_poll_get_default_interval(obj->userstate_);
+
+  return scope.Close(Number::New(interval));
+}
+
+Handle<Value> UserState::MessagePoll(const Arguments& args) {
+  HandleScope scope;
+  UserState* obj = ObjectWrap::Unwrap<UserState>(args.This());
+
+  otrl_message_poll(obj->userstate_,NULL,NULL);
+
+  return scope.Close(Undefined());
 }
 
 Handle<Value> UserState::GetFingerprint(const Arguments& args) {

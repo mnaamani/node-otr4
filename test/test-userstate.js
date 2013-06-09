@@ -14,6 +14,8 @@ var alice_settings ={
 
 
 var alice = new otr.User(alice_settings);
+console.log("MessagePoll Default Interval:",alice.getMessagePollDefaultInterval());
+alice.messagePoll();
 alice.name = "Alice";
 
 make_key_for_user(alice,alice_settings.accountname,alice_settings.protocol);

@@ -94,11 +94,9 @@ User.prototype.writeKeys = function(){
     this.state.writeKeysSync(this.keys);
 };
 
-/*
 User.prototype.ConnContext = function(accountname, protocol, recipient){    
     return new otr.ConnContext(this.state,accountname,protocol,recipient);
 };
-*/
 
 /*
 User.prototype.exportKeyBigInt = function(accountname,protocol){
@@ -113,16 +111,15 @@ User.prototype.exportKeyHex = function(accountname,protocol){
         return k.export("HEX");
     }
 };
-*/
-/*
 User.prototype.importKey = function(accountname,protocol,dsa,base){
     this.state.importKey(accountname,protocol,dsa,base);
     this.state.writeKeysSync(this.keys);
 };
+*/
+
 User.prototype.getMessagePollDefaultInterval = function(){
     return this.state.getMessagePollDefaultInterval();
 };
 User.prototype.messagePoll = function(ops,opdata){
     this.state.messagePoll(ops,opdata);
 };
-*/

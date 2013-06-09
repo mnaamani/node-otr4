@@ -65,7 +65,10 @@ class UserState : public node::ObjectWrap {
   static v8::Handle<v8::Value> Write_Instags_Sync(const v8::Arguments& args);
   static v8::Handle<v8::Value> Generate_Instag(const v8::Arguments& args);
   static v8::Handle<v8::Value> Find_Instag(const v8::Arguments& args);
+  static v8::Handle<v8::Value> MessagePoll_DefaultInterval(const v8::Arguments& args);
+  static v8::Handle<v8::Value> MessagePoll(const v8::Arguments& args);
   static v8::Handle<v8::Value> Free(const v8::Arguments& args);
+
   //Workers
   static void Worker_Generate_Key (uv_work_t* req);
   static void Worker_Read_Keys (uv_work_t* req);
