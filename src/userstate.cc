@@ -22,6 +22,7 @@
 
 extern "C" {
     #include <libotr/privkey.h>
+    #include "otr-extras.c"
 }
 
 using namespace v8;
@@ -60,13 +61,16 @@ void UserState::Init(Handle<Object> target) {
   NODE_SET_PROTOTYPE_METHOD(constructor, "fingerprint",GetFingerprint);
   NODE_SET_PROTOTYPE_METHOD(constructor, "accounts",Accounts);
   NODE_SET_PROTOTYPE_METHOD(constructor, "readKeysSync",Read_Keys_Sync);
+  NODE_SET_PROTOTYPE_METHOD(constructor, "writeKeysSync",Write_Keys_Sync);
+  NODE_SET_PROTOTYPE_METHOD(constructor, "deleteKeyOnFile",Delete_Key_On_File);
+  NODE_SET_PROTOTYPE_METHOD(constructor, "findKey",Find_Key);
   NODE_SET_PROTOTYPE_METHOD(constructor, "readFingerprintsSync",Read_Fingerprints_Sync);
   NODE_SET_PROTOTYPE_METHOD(constructor, "readInstagsSync",Read_Instags_Sync);
   NODE_SET_PROTOTYPE_METHOD(constructor, "writeInstagsSync",Write_Instags_Sync);
   NODE_SET_PROTOTYPE_METHOD(constructor, "generateInstag",Generate_Instag);
   NODE_SET_PROTOTYPE_METHOD(constructor, "findInstag",Find_Instag);
   NODE_SET_PROTOTYPE_METHOD(constructor, "writeFingerprintsSync",Write_Fingerprints_Sync);
-  NODE_SET_PROTOTYPE_METHOD(constructor, "writeTrustedFingerprintsSync",Write_Fingerprints_Sync);
+  NODE_SET_PROTOTYPE_METHOD(constructor, "writeTrustedFingerprintsSync",Write_Trusted_Fingerprints_Sync);
   NODE_SET_PROTOTYPE_METHOD(constructor, "free",Free);
 
   target->Set(name, constructor->GetFunction());
@@ -184,6 +188,43 @@ Handle<Value> UserState::Read_Keys(const Arguments& args) {
 void UserState::Worker_Read_Keys(uv_work_t* req){
   Baton* baton = static_cast<Baton*>(req->data);
   baton->error = otrl_privkey_read(baton->userstate, baton->arg0.c_str());
+}
+
+Handle<Value> UserState::Write_Keys_Sync(const Arguments& args) {
+  HandleScope scope;
+  UserState* obj = ObjectWrap::Unwrap<UserState>(args.This());
+
+  if(!args.Length() > 0 || !args[0]->IsString()){
+    return scope.Close(V8EXCEPTION("Invalid arguments. One argument 'filename' (string) excpected."));
+  }
+  String::Utf8Value filename(args[0]->ToString());
+
+  gcry_error_t error = jsapi_userstate_write_to_file(obj->userstate_, *filename);
+
+  if(error) return scope.Close(GCRY_EXCEPTION(error));
+  return scope.Close(Undefined());
+}
+
+Handle<Value> UserState::Delete_Key_On_File(const Arguments& args) {
+  HandleScope scope;
+  UserState* obj = ObjectWrap::Unwrap<UserState>(args.This());
+    if(!args.Length() > 0 || !args[0]->IsString()){
+    return scope.Close(V8EXCEPTION("Invalid arguments. First argument 'filename' (string) excpected."));
+  }
+  if(!args.Length() > 1 || !args[1]->IsString()){
+    return scope.Close(V8EXCEPTION("Invalid arguments. Second argument 'accountname' (string) excpected."));
+  }
+  if(!args.Length() > 2 || !args[2]->IsString()){
+    return scope.Close(V8EXCEPTION("Invalid arguments. Third argument 'protocol' (string) excpected."));
+  }
+  String::Utf8Value filename(args[0]->ToString());
+  String::Utf8Value accountname(args[1]->ToString());
+  String::Utf8Value protocol(args[2]->ToString());
+  
+  gcry_error_t error = jsapi_privkey_delete(obj->userstate_, *filename, *accountname, *protocol);
+
+  if(error) return scope.Close(GCRY_EXCEPTION(error));
+  return scope.Close(Undefined());
 }
 
 Handle<Value> UserState::Read_Fingerprints_Sync(const Arguments& args) {
@@ -433,6 +474,26 @@ Handle<Value> UserState::Generate_Key(const Arguments& args) {
 void UserState::Worker_Generate_Key(uv_work_t* req){
   Baton* baton = static_cast<Baton*>(req->data);
   baton->error = otrl_privkey_generate(baton->userstate, baton->arg0.c_str(), baton->arg1.c_str(), baton->arg2.c_str());
+}
+
+Handle<Value> UserState::Find_Key(const Arguments& args) {
+  HandleScope scope;
+  UserState* obj = ObjectWrap::Unwrap<UserState>(args.This());
+
+  if(!args.Length() > 0 || !args[0]->IsString()){
+    return scope.Close(V8EXCEPTION("Invalid arguments. First argument 'accountname' (string) excpected."));
+  }
+  if(!args.Length() > 1 || !args[1]->IsString()){
+    return scope.Close(V8EXCEPTION("Invalid arguments. Second argument 'protocol' (string) excpected."));
+  }
+
+  String::Utf8Value accountname(args[0]->ToString());
+  String::Utf8Value protocol(args[1]->ToString());
+  
+  OtrlPrivKey * privkey = otrl_privkey_find(obj->userstate_, *accountname, *protocol);
+
+  if(privkey != NULL) return scope.Close(Number::New(1));
+  return scope.Close(Undefined());
 }
 
 void UserState::Worker_After(uv_work_t* req) {

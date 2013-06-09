@@ -84,21 +84,21 @@ User.prototype.writeTrustedFingerprints = function(){
     this.state.writeTrustedFingerprintsSync(this.fingerprints);
 };
 
-/*
 User.prototype.findKey = function(accountname,protocol){
     return this.state.findKey(accountname,protocol);
 };
 User.prototype.deleteKey = function(accountname,protocol){
     this.state.deleteKeyOnFile(this.keys,accountname,protocol);
 };
+User.prototype.writeKeys = function(){
+    this.state.writeKeysSync(this.keys);
+};
+
+/*
 User.prototype.ConnContext = function(accountname, protocol, recipient){    
     return new otr.ConnContext(this.state,accountname,protocol,recipient);
 };
 */
-
-User.prototype.writeKeys = function(){
-    this.state.writeKeysSync(this.keys);
-};
 
 /*
 User.prototype.exportKeyBigInt = function(accountname,protocol){
