@@ -20,7 +20,11 @@
 #include "otr.hpp"
 
 extern "C" {
-    #include <libotr/proto.h>
+    GCRY_THREAD_OPTION_PTHREAD_IMPL;
+}
+
+extern "C" {
+  #include <libotr/proto.h>
 }
 
 
@@ -32,9 +36,22 @@ namespace otr {
 }
 
 void RegisterModule(v8::Handle<v8::Object> target) {
+  /* Version check should be the very first call because it
+      makes sure that important subsystems are intialized. */
+  puts("initialising GCRYPT");
+  gcry_control (GCRYCTL_SET_THREAD_CBS, &gcry_threads_pthread);
+  if (!gcry_check_version (GCRYPT_VERSION))
+  {
+    fputs ("libgcrypt version mismatch\n", stderr);
+    exit (2);
+  }
+
+  gcry_control (GCRYCTL_INITIALIZATION_FINISHED, 0);
   OTRL_INIT;
 
   target->Set(v8::String::NewSymbol("version"), v8::FunctionTemplate::New(otr::Version)->GetFunction());
+
+  otr::UserState::Init(target);
 }
 
 
