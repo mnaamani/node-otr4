@@ -364,6 +364,9 @@ Handle<Value> UserState::Write_Trusted_Fingerprints_Sync(const Arguments& args) 
   error = gcry_error(GPG_ERR_NO_ERROR);
 
     for(context = us->context_root; context; context = context->next) {
+      /* Fingerprints are only stored in the master contexts */
+      if (context->their_instance != OTRL_INSTAG_MASTER) continue;
+      
       /* Don't bother with the first (fingerprintless) entry. */
       for (fingerprint = context->fingerprint_root.next; fingerprint && fingerprint->trust[0]!='\0' ;
         fingerprint = fingerprint->next) {
