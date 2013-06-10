@@ -154,13 +154,16 @@ Handle<Value> UserState::Accounts(const Arguments& args){
     int count=0;
     char fingerprint[45];
     Local<Object> account;
-
+    OtrlInsTag *instag;
     for(p=us->userstate_->privkey_root; p; p=p->next) {
         account = Object::New();
    	    account->Set(String::NewSymbol("accountname"),String::New(p->accountname));
         account->Set(String::NewSymbol("protocol"), String::New(p->protocol));
         otrl_privkey_fingerprint(us->userstate_, fingerprint, p->accountname, p->protocol);
         account->Set(String::NewSymbol("fingerprint"), String::New(fingerprint));
+        instag = otrl_instag_find(us->userstate_, p->accountname, p->protocol);
+        if(instag != NULL) account->Set(String::NewSymbol("instag"), Number::New(instag->instag));
+        account->Set(String::NewSymbol("privkey"), PrivateKey::WrapPrivateKey(p));
     	result->Set(count++,account);
     }
     return scope.Close(result);
@@ -519,7 +522,7 @@ Handle<Value> UserState::Find_Key(const Arguments& args) {
   
   OtrlPrivKey * privkey = otrl_privkey_find(obj->userstate_, *accountname, *protocol);
 
-  if(privkey != NULL) return scope.Close(Number::New(1));
+  if(privkey != NULL) return scope.Close(PrivateKey::WrapPrivateKey(privkey));
   return scope.Close(Undefined());
 }
 

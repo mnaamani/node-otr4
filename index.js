@@ -109,7 +109,7 @@ User.prototype.ConnContext = function(accountname, protocol, recipient){
     return new otr.ConnContext(this.state,accountname,protocol,recipient);
 };
 
-/*
+
 User.prototype.exportKeyBigInt = function(accountname,protocol){
     var k = this.findKey(accountname,protocol);
     if(k){
@@ -122,6 +122,7 @@ User.prototype.exportKeyHex = function(accountname,protocol){
         return k.export("HEX");
     }
 };
+/*
 User.prototype.importKey = function(accountname,protocol,dsa,base){
     this.state.importKey(accountname,protocol,dsa,base);
     this.state.writeKeysSync(this.keys);

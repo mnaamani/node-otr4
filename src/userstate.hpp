@@ -36,6 +36,8 @@ class UserState : public node::ObjectWrap {
  protected:
   friend class MessageAppOps;
   friend class ConnectionCtx;
+  friend class PrivateKey;
+
   OtrlUserState userstate_;
   bool reference;
 
