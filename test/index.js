@@ -166,6 +166,8 @@ function end_smp_test(){
     SMP_TEST_PASSED = session_a.isAuthenticated();
     SMP_TEST_DONE = true;
     SMP_TEST_IN_PROGRESS = false;
+    session_a.user.writeTrustedFingerprints();
+    session_b.user.writeTrustedFingerprints();
 }
 session_b.on("smp_request",function(){
         console.log("Received SMP Request.");
