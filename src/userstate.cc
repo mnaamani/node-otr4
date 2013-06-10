@@ -351,7 +351,7 @@ Handle<Value> UserState::Write_Trusted_Fingerprints_Sync(const Arguments& args) 
   HandleScope scope;
   UserState* obj = ObjectWrap::Unwrap<UserState>(args.This());
   OtrlUserState us = obj->userstate_;
-  FILE *storef;
+  FILE *storef = NULL;
   ConnContext *context;
   Fingerprint *fingerprint;
   gcry_error_t error;
@@ -361,18 +361,21 @@ Handle<Value> UserState::Write_Trusted_Fingerprints_Sync(const Arguments& args) 
   }
   String::Utf8Value filename(args[0]->ToString());
 
-  storef = fopen(*filename, "wb");
-
-  if (!storef) {
-    error = gcry_error_from_errno(errno);
-  }else{
+  error = gcry_error(GPG_ERR_NO_ERROR);
 
     for(context = us->context_root; context; context = context->next) {
-
       /* Don't bother with the first (fingerprintless) entry. */
-      for (fingerprint = context->fingerprint_root.next; fingerprint && fingerprint->trust;
+      for (fingerprint = context->fingerprint_root.next; fingerprint && fingerprint->trust[0]!='\0' ;
         fingerprint = fingerprint->next) {
         int i;
+        //only open the file if we have something to write
+        if(storef == NULL){
+             storef = fopen(*filename, "wb");
+            if(!storef) {
+                error = gcry_error_from_errno(errno);
+                return scope.Close(GCRY_EXCEPTION(error));
+            }
+        }
         fprintf(storef, "%s\t%s\t%s\t", context->username,
             context->accountname, context->protocol);
         for(i=0;i<20;++i) {
@@ -381,11 +384,7 @@ Handle<Value> UserState::Write_Trusted_Fingerprints_Sync(const Arguments& args) 
         fprintf(storef, "\t%s\n", fingerprint->trust ? fingerprint->trust : "");
       }
     }
-
-    error = gcry_error(GPG_ERR_NO_ERROR);
-    fclose(storef);
-  }
-
+  if(storef != NULL) fclose(storef);
   if(error) return scope.Close(GCRY_EXCEPTION(error));
   return scope.Close(Undefined());
 }
