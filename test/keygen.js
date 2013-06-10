@@ -33,6 +33,9 @@ make_instag_for_user(bob,bob_settings.accountname,bob_settings.protocol);
 console.log(alice.accounts());
 console.log(bob.accounts());
 
+var key = alice.findKey(alice_settings.accountname,alice_settings.protocol);
+key.export();
+
 function make_key_for_user(user,accountname,protocol){
     if( user.findKey(accountname,protocol) ) return;
     console.log("creating a new key for:",user.name,accountname,protocol);

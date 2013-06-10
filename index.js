@@ -62,11 +62,10 @@ function User( config ){
   }
 }
 
-//todo return the OtrlPrivKey in callback
 User.prototype.generateKey = function(accountname,protocol,callback){
     var user = this;
-    this.state.generateKey(this.keys,accountname,protocol,function(){
-        callback.apply(user,arguments);
+    this.state.generateKey(this.keys,accountname,protocol,function(err){
+        callback.apply(user, [err?0 : null, err? undefined:user.findKey(accountname,protocol)]);
     });
 };
 
@@ -109,7 +108,9 @@ User.prototype.ConnContext = function(accountname, protocol, recipient){
     return new otr.ConnContext(this.state,accountname,protocol,recipient);
 };
 
-
+otr.PrivateKey.prototype.export = function(){
+    //.... todo
+}
 User.prototype.exportKeyBigInt = function(accountname,protocol){
     var k = this.findKey(accountname,protocol);
     if(k){
