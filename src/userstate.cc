@@ -22,7 +22,7 @@
 
 extern "C" {
     #include <libotr/privkey.h>
-    #include "otr-extras.c"
+    #include "otr-extras.h"
 }
 
 using namespace v8;

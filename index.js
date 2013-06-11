@@ -26,6 +26,7 @@ if(otr.version()!="4.0.0"){
 
 var util = require('util');
 var events = require('events');
+var BigInt = require('./bigint.js');
 
 exports.version = otr.version;
 exports.User = User;
@@ -108,9 +109,25 @@ User.prototype.ConnContext = function(accountname, protocol, recipient){
     return new otr.ConnContext(this.state,accountname,protocol,recipient);
 };
 
-otr.PrivateKey.prototype.export = function(){
-    //.... todo
-}
+otr.PrivateKey.prototype.export = function(format){
+    var dsakey = {};
+    var key = this;
+
+    ['p','q','g','y','x'].forEach(function(token){
+        dsakey[token] = key[token];
+    });
+
+    if(format == "BIGINT") {
+        ['p','q','g','y','x'].forEach(function(token){
+            dsakey[token] = BigInt.str2bigInt( dsakey[token], 16);
+        });
+    }
+
+    dsakey.type = '\u0000\u0000';
+
+    return dsakey;
+};
+
 User.prototype.exportKeyBigInt = function(accountname,protocol){
     var k = this.findKey(accountname,protocol);
     if(k){

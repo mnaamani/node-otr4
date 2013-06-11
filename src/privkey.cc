@@ -22,6 +22,7 @@
 
 extern "C"{
     #include <libotr/privkey.h>
+    #include "otr-extras.h"
 }
 
 using namespace v8;
@@ -48,7 +49,12 @@ void PrivateKey::Init(Handle<Object> target) {
 
   // Prototype
   NODE_SET_PROTOTYPE_ACCESSOR(constructor, "protocol", keyGetter,keySetter);
-  NODE_SET_PROTOTYPE_ACCESSOR(constructor, "accountname", keyGetter,keySetter);  
+  NODE_SET_PROTOTYPE_ACCESSOR(constructor, "accountname", keyGetter,keySetter);
+  NODE_SET_PROTOTYPE_ACCESSOR(constructor, "p", keyGetter,keySetter);
+  NODE_SET_PROTOTYPE_ACCESSOR(constructor, "q", keyGetter,keySetter);
+  NODE_SET_PROTOTYPE_ACCESSOR(constructor, "g", keyGetter,keySetter);
+  NODE_SET_PROTOTYPE_ACCESSOR(constructor, "y", keyGetter,keySetter);
+  NODE_SET_PROTOTYPE_ACCESSOR(constructor, "x", keyGetter,keySetter);
 
   target->Set(name, constructor->GetFunction());
 }
@@ -77,8 +83,11 @@ Handle<Value> PrivateKey::keyGetter(Local<String> property, const AccessorInfo& 
     OtrlPrivKey *privkey = obj->privkey_;
     if(privkey==NULL) return scope.Close(Undefined());
 
+    char buffer[1024];
+    size_t nbytes = 0;
+    gcry_error_t err;
+
     std::string prop = cvv8::CastFromJS<std::string>(property);
-    puts("getting key property");
 
     IfStrEqual(prop,"protocol"){
         return scope.Close(String::New(privkey->protocol));
@@ -87,6 +96,26 @@ Handle<Value> PrivateKey::keyGetter(Local<String> property, const AccessorInfo& 
         return scope.Close(String::New(privkey->accountname));
     }
 
+    IfStrEqual(prop,"p"){
+        err = jsapi_privkey_get_dsa_token(privkey,"p",(unsigned char*)buffer,1024,&nbytes);
+        if(err ==0 && nbytes > 0) return scope.Close(String::New(buffer));
+    }
+    IfStrEqual(prop,"q"){
+        err = jsapi_privkey_get_dsa_token(privkey,"q",(unsigned char*)buffer,1024,&nbytes);
+        if(err ==0 && nbytes > 0) return scope.Close(String::New(buffer));
+    }
+    IfStrEqual(prop,"g"){
+        err = jsapi_privkey_get_dsa_token(privkey,"g",(unsigned char*)buffer,1024,&nbytes);
+        if(err ==0 && nbytes > 0) return scope.Close(String::New(buffer));
+    }
+    IfStrEqual(prop,"x"){
+        err = jsapi_privkey_get_dsa_token(privkey,"x",(unsigned char*)buffer,1024,&nbytes);
+        if(err ==0 && nbytes > 0) return scope.Close(String::New(buffer));
+    }
+    IfStrEqual(prop,"y"){
+        err = jsapi_privkey_get_dsa_token(privkey,"y",(unsigned char*)buffer,1024,&nbytes);
+        if(err ==0 && nbytes > 0) return scope.Close(String::New(buffer));
+    }
     return scope.Close(Undefined());
 }
 

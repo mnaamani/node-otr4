@@ -30,25 +30,26 @@ make_instag_for_user(alice,alice_settings.accountname,alice_settings.protocol);
 make_key_for_user(bob,bob_settings.accountname,bob_settings.protocol);
 make_instag_for_user(bob,bob_settings.accountname,bob_settings.protocol);
 
-console.log(alice.accounts());
-console.log(bob.accounts());
-
-var key = alice.findKey(alice_settings.accountname,alice_settings.protocol);
-key.export();
 
 function make_key_for_user(user,accountname,protocol){
-    if( user.findKey(accountname,protocol) ) return;
+    var k = user.findKey(accountname,protocol);
+    if(k){
+        console.log(k.export());
+        return;
+    }
     console.log("creating a new key for:",user.name,accountname,protocol);
     user.generateKey(accountname,protocol,function(err,key){
         if(err){
             console.log(err);
             process.exit();
-        }else debug("Key Generated Successfully");
+        }else debug("Key Generated Successfully",key.export());
     });
 }
 function make_instag_for_user(user,accountname,protocol){
-    if( user.findInstag(accountname,protocol)) return;
-    user.generateInstag(accountname,protocol,function(err,instag){
+    if(!user.findInstag(accountname,protocol)){
+      user.generateInstag(accountname,protocol,function(err,instag){
         debug("new instance tag for",user.name,":",instag);
-    });
+      });
+    }
+    console.log(user.accounts());
 }
