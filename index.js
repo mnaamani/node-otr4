@@ -43,6 +43,41 @@ exports.debugOff = function(){
    debug = function(){};
 };
 
+otr.PrivateKey.prototype.export = function(format){
+    var dsakey = {};
+    var key = this;
+
+    ['p','q','g','y','x'].forEach(function(token){
+        dsakey[token] = key[token];
+    });
+
+    if(format == "BIGINT") {
+        ['p','q','g','y','x'].forEach(function(token){
+            dsakey[token] = BigInt.str2bigInt( dsakey[token], 16);
+        });
+    }
+
+    dsakey.type = '\u0000\u0000';
+
+    return dsakey;
+};
+otr.PrivateKey.prototype.exportPublic = function( format ){
+    var key = this.export(format);
+    if(key){
+        delete key.x;
+        return key;
+    }
+};
+otr.PrivateKey.prototype.accountname = function(){
+    return this.accountname_;
+};
+otr.PrivateKey.prototype.protocol = function(){
+    return this.protocol_;
+};
+otr.PrivateKey.prototype.toString = function(){
+    return this.exportPublic("HEX");
+};
+
 function User( config ){
   if(config && config.keys && config.fingerprints && config.instags){
     this.state = new otr.UserState();
@@ -107,25 +142,6 @@ User.prototype.writeKeys = function(){
 
 User.prototype.ConnContext = function(accountname, protocol, recipient){    
     return new otr.ConnContext(this.state,accountname,protocol,recipient);
-};
-
-otr.PrivateKey.prototype.export = function(format){
-    var dsakey = {};
-    var key = this;
-
-    ['p','q','g','y','x'].forEach(function(token){
-        dsakey[token] = key[token];
-    });
-
-    if(format == "BIGINT") {
-        ['p','q','g','y','x'].forEach(function(token){
-            dsakey[token] = BigInt.str2bigInt( dsakey[token], 16);
-        });
-    }
-
-    dsakey.type = '\u0000\u0000';
-
-    return dsakey;
 };
 
 User.prototype.exportKeyBigInt = function(accountname,protocol){

@@ -48,8 +48,8 @@ void PrivateKey::Init(Handle<Object> target) {
   constructor->SetClassName(name);
 
   // Prototype
-  NODE_SET_PROTOTYPE_ACCESSOR(constructor, "protocol", keyGetter,keySetter);
-  NODE_SET_PROTOTYPE_ACCESSOR(constructor, "accountname", keyGetter,keySetter);
+  NODE_SET_PROTOTYPE_ACCESSOR(constructor, "protocol_", keyGetter,keySetter);
+  NODE_SET_PROTOTYPE_ACCESSOR(constructor, "accountname_", keyGetter,keySetter);
   NODE_SET_PROTOTYPE_ACCESSOR(constructor, "p", keyGetter,keySetter);
   NODE_SET_PROTOTYPE_ACCESSOR(constructor, "q", keyGetter,keySetter);
   NODE_SET_PROTOTYPE_ACCESSOR(constructor, "g", keyGetter,keySetter);
@@ -89,10 +89,10 @@ Handle<Value> PrivateKey::keyGetter(Local<String> property, const AccessorInfo& 
 
     std::string prop = cvv8::CastFromJS<std::string>(property);
 
-    IfStrEqual(prop,"protocol"){
+    IfStrEqual(prop,"protocol_"){
         return scope.Close(String::New(privkey->protocol));
     }
-    IfStrEqual(prop,"accountname"){
+    IfStrEqual(prop,"accountname_"){
         return scope.Close(String::New(privkey->accountname));
     }
 
