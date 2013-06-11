@@ -47,17 +47,17 @@ void ConnectionCtx::Init(Handle<Object> target) {
   constructor->SetClassName(name);
 
   // Prototype
-  NODE_SET_PROTOTYPE_ACCESSOR(constructor, "protocol", ctxGetter,ctxSetter);
-  NODE_SET_PROTOTYPE_ACCESSOR(constructor, "username", ctxGetter,ctxSetter);
-  NODE_SET_PROTOTYPE_ACCESSOR(constructor, "accountname", ctxGetter,ctxSetter);
-  NODE_SET_PROTOTYPE_ACCESSOR(constructor, "msgstate", ctxGetter,ctxSetter);
-  NODE_SET_PROTOTYPE_ACCESSOR(constructor, "fingerprint", ctxGetter,ctxSetter);
-  NODE_SET_PROTOTYPE_ACCESSOR(constructor, "protocol_version", ctxGetter,ctxSetter);
-  NODE_SET_PROTOTYPE_ACCESSOR(constructor, "smstate", ctxGetter,ctxSetter);
-  NODE_SET_PROTOTYPE_ACCESSOR(constructor, "trust", ctxGetter,ctxSetter);
-  NODE_SET_PROTOTYPE_ACCESSOR(constructor, "their_instance", ctxGetter,ctxSetter);
-  NODE_SET_PROTOTYPE_ACCESSOR(constructor, "our_instance", ctxGetter,ctxSetter);
-  NODE_SET_PROTOTYPE_ACCESSOR(constructor, "master", ctxGetter,ctxSetter);
+  NODE_SET_PROTOTYPE_ACCESSOR(constructor, "protocol_", ctxGetter,ctxSetter);
+  NODE_SET_PROTOTYPE_ACCESSOR(constructor, "username_", ctxGetter,ctxSetter);
+  NODE_SET_PROTOTYPE_ACCESSOR(constructor, "accountname_", ctxGetter,ctxSetter);
+  NODE_SET_PROTOTYPE_ACCESSOR(constructor, "msgstate_", ctxGetter,ctxSetter);
+  NODE_SET_PROTOTYPE_ACCESSOR(constructor, "fingerprint_", ctxGetter,ctxSetter);
+  NODE_SET_PROTOTYPE_ACCESSOR(constructor, "protocol_version_", ctxGetter,ctxSetter);
+  NODE_SET_PROTOTYPE_ACCESSOR(constructor, "smstate_", ctxGetter,ctxSetter);
+  NODE_SET_PROTOTYPE_ACCESSOR(constructor, "trust_", ctxGetter,ctxSetter);
+  NODE_SET_PROTOTYPE_ACCESSOR(constructor, "their_instance_", ctxGetter,ctxSetter);
+  NODE_SET_PROTOTYPE_ACCESSOR(constructor, "our_instance_", ctxGetter,ctxSetter);
+  NODE_SET_PROTOTYPE_ACCESSOR(constructor, "master_", ctxGetter,ctxSetter);
 
   target->Set(name, constructor->GetFunction());
 }
@@ -111,42 +111,42 @@ Handle<Value> ConnectionCtx::ctxGetter(Local<String> property, const AccessorInf
 
     std::string prop = cvv8::CastFromJS<std::string>(property);
 
-    IfStrEqual(prop,"protocol"){
+    IfStrEqual(prop,"protocol_"){
         return scope.Close(String::New(ctx->protocol));
     }
-    IfStrEqual(prop,"username"){
+    IfStrEqual(prop,"username_"){
         return scope.Close(String::New(ctx->username));
     }
-    IfStrEqual(prop,"accountname"){
+    IfStrEqual(prop,"accountname_"){
         return scope.Close(String::New(ctx->accountname));
     }
-    IfStrEqual(prop,"msgstate"){
+    IfStrEqual(prop,"msgstate_"){
         return scope.Close(Int32::New((unsigned int)ctx->msgstate));
     }
-    IfStrEqual(prop,"protocol_version"){
+    IfStrEqual(prop,"protocol_version_"){
         return scope.Close(Int32::New((unsigned int)ctx->protocol_version));
     }
-    IfStrEqual(prop,"smstate"){
+    IfStrEqual(prop,"smstate_"){
         return scope.Close(Int32::New((unsigned int)ctx->smstate->sm_prog_state));
     }
-    IfStrEqual(prop,"fingerprint"){
+    IfStrEqual(prop,"fingerprint_"){
         if(ctx->active_fingerprint==NULL) return scope.Close(Undefined());
         char human[45];
         otrl_privkey_hash_to_human(human, ctx->active_fingerprint->fingerprint);
         return scope.Close(String::New(human));
     }
-    IfStrEqual(prop,"trust"){
+    IfStrEqual(prop,"trust_"){
         if(ctx->active_fingerprint==NULL) return scope.Close(Undefined());
         if(ctx->active_fingerprint->trust == NULL) return scope.Close(Undefined());
         return scope.Close(String::New(ctx->active_fingerprint->trust));
     }
-    IfStrEqual(prop,"their_instance"){
+    IfStrEqual(prop,"their_instance_"){
         return scope.Close(Number::New(ctx->their_instance));
     }
-    IfStrEqual(prop,"our_instance"){
+    IfStrEqual(prop,"our_instance_"){
         return scope.Close(Number::New(ctx->our_instance));
     }
-    IfStrEqual(prop,"master"){
+    IfStrEqual(prop,"master_"){
         return scope.Close(WrapConnectionCtx(ctx->m_context));
     }
     return scope.Close(Undefined());

@@ -78,6 +78,40 @@ otr.PrivateKey.prototype.toString = function(){
     return this.exportPublic("HEX");
 };
 
+otr.ConnContext.prototype.protocol = function(){
+    return this.protocol_;
+};
+otr.ConnContext.prototype.username = function(){
+    return this.username_;
+};
+otr.ConnContext.prototype.accountname = function(){
+    return this.accountname_;
+};
+otr.ConnContext.prototype.msgstate = function(){
+    return this.msgstate_;
+};
+otr.ConnContext.prototype.fingerprint = function(){
+    return this.fingerprint_;
+};
+otr.ConnContext.prototype.protocol_version = function(){
+    return this.protocol_version_;
+};
+otr.ConnContext.prototype.smstate = function(){
+    return this.smstate_;
+};
+otr.ConnContext.prototype.trust = function(){
+    return this.trust_;
+};
+otr.ConnContext.prototype.their_instance = function(){
+    return this.their_instance_;
+};
+otr.ConnContext.prototype.our_instance = function(){
+    return this.our_instance_;
+};
+otr.ConnContext.prototype.master = function(){
+    return this.master_;
+};
+
 function User( config ){
   if(config && config.keys && config.fingerprints && config.instags){
     this.state = new otr.UserState();
@@ -223,7 +257,7 @@ Session.prototype.connect = function(){
 Session.prototype.send = function(message,instag){
     instag = instag || 1;//default instag = BEST 
     //message can be any object that can be serialsed to a string using it's .toString() method.   
-    var msgout = this.ops.messageSending(this.user.state, this.context.accountname, this.context.protocol, this.context.username, message.toString(), instag, this.context);
+    var msgout = this.ops.messageSending(this.user.state, this.context.accountname(), this.context.protocol(), this.context.username(), message.toString(), instag, this.context);
     if(msgout){
         //frag policy something other than SEND_ALL.. results in a fragment to be sent manually
         this.emit("inject_message",msgout);
@@ -231,12 +265,12 @@ Session.prototype.send = function(message,instag){
 };
 Session.prototype.recv = function(message){
     //message can be any object that can be serialsed to a string using it's .toString() method.
-    var msg = this.ops.messageReceiving(this.user.state, this.context.accountname, this.context.protocol, this.context.username, message.toString(), this.context);
+    var msg = this.ops.messageReceiving(this.user.state, this.context.accountname(), this.context.protocol(), this.context.username(), message.toString(), this.context);
     if(msg) this.emit("message",msg,this.isEncrypted());
 };
 Session.prototype.close = function(){
     if(this.message_poll_interval) clearInterval(this.message_poll_interval);
-    this.ops.disconnect(this.user.state,this.context.accountname,this.context.protocol,this.context.username,this.context.their_instance);
+    this.ops.disconnect(this.user.state,this.context.accountname(),this.context.protocol(),this.context.username(),this.context.their_instance());
     this.emit("shutdown");
 };
 Session.prototype.start_smp = function(secret){
@@ -278,10 +312,10 @@ Session.prototype.abort_smp = function(){
 };
 
 Session.prototype.isEncrypted = function(){
-    return (this.context.msgstate===1);
+    return (this.context.msgstate()===1);
 };
 Session.prototype.isAuthenticated = function(){
-    return (this.context.trust==="smp");
+    return (this.context.trust()==="smp");
 };
 Session.prototype.extraSymKey = function(use,usedata){
     usedata = new Buffer(usedata);//convert a string or ArrayBuffer to a Buffer
