@@ -199,19 +199,19 @@ gcry_error_t jsapi_make_pubkey(unsigned char **pubbufp, size_t *publenp,
 
 
 gcry_error_t jsapi_userstate_import_privkey(OtrlUserState us, char *accountname, char * protocol, 
-                    gcry_mpi_t p, gcry_mpi_t q, gcry_mpi_t g, gcry_mpi_t y, gcry_mpi_t x){
+                    char *p, char *q, char *g, char *y, char *x){
 
     size_t *erroff;
     const char *token;
     size_t tokenlen;
     gcry_error_t err;
     gcry_sexp_t allkeys;
-    //size_t i;
+
     int i;
     //puts("jsapi_userstate_import_privkey: building sexp");
     
     err = gcry_sexp_build(&allkeys,erroff,"(privkeys (account (name %s) (protocol %s) (private-key (dsa \
-        (p %M) (q %M) (g %M) (y %M) (x %M) ))))",accountname,protocol,p,q,g,y,x);
+        (p %s) (q %s) (g %s) (y %s) (x %s) ))))",accountname,protocol,p,q,g,y,x);
 
     if(err) return err;
     

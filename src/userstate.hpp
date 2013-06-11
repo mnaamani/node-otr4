@@ -56,6 +56,7 @@ class UserState : public node::ObjectWrap {
   static v8::Handle<v8::Value> GetFingerprint(const v8::Arguments& args);
   static v8::Handle<v8::Value> Accounts(const v8::Arguments& args);
   static v8::Handle<v8::Value> Get_Key(const v8::Arguments& args);
+  static v8::Handle<v8::Value> Import_Key(const v8::Arguments& args);
   static v8::Handle<v8::Value> Read_Keys_Sync(const v8::Arguments& args);
   static v8::Handle<v8::Value> Write_Keys_Sync(const v8::Arguments& args);
   static v8::Handle<v8::Value> Delete_Key_On_File(const v8::Arguments& args);

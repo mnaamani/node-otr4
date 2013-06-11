@@ -66,7 +66,7 @@ function User( config ){
 User.prototype.generateKey = function(accountname,protocol,callback){
     var user = this;
     this.state.generateKey(this.keys,accountname,protocol,function(err){
-        callback.apply(user, [err?0 : null, err? undefined:user.findKey(accountname,protocol)]);
+        callback.apply(user, [err, err? undefined:user.findKey(accountname,protocol)]);
     });
 };
 
@@ -140,12 +140,44 @@ User.prototype.exportKeyHex = function(accountname,protocol){
         return k.export("HEX");
     }
 };
-/*
+
 User.prototype.importKey = function(accountname,protocol,dsa,base){
-    this.state.importKey(accountname,protocol,dsa,base);
+
+    var key = {
+        p: null,
+        q: null,
+        g: null,
+        y: null,
+        x: null
+    };
+    var doImport = true;
+    
+    ['p','q','g','y','x'].forEach(function(t){
+        var bi;
+        switch( typeof dsa[t] ){
+            case 'string':
+                bi = BigInt.str2bigInt(dsa[t],base || 16);
+                break;
+            case 'object':
+                bi = dsa[t];
+                break;
+            default:
+                doImport = false;
+                bi = null;
+        }
+        if(bi!=null) {
+            key[t] = BigInt.bigInt2str(bi,10);
+        }else doImport = false; 
+    });
+    
+    if( doImport ) {
+      this.state.importKey(accountname,protocol,key.p,key.q,key.g,key.y,key.x);
+    }
+
+    if(!doImport) throw new Error("DSA Key import failed. Unsupported Format.");
+
     this.state.writeKeysSync(this.keys);
 };
-*/
 
 User.prototype.getMessagePollDefaultInterval = function(){
     return this.state.getMessagePollDefaultInterval();

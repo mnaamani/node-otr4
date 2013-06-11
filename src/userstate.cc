@@ -65,6 +65,7 @@ void UserState::Init(Handle<Object> target) {
   NODE_SET_PROTOTYPE_METHOD(constructor, "writeKeysSync",Write_Keys_Sync);
   NODE_SET_PROTOTYPE_METHOD(constructor, "deleteKeyOnFile",Delete_Key_On_File);
   NODE_SET_PROTOTYPE_METHOD(constructor, "findKey",Find_Key);
+  NODE_SET_PROTOTYPE_METHOD(constructor, "importKey",Import_Key);
 
   NODE_SET_PROTOTYPE_METHOD(constructor, "readInstagsSync",Read_Instags_Sync);
   NODE_SET_PROTOTYPE_METHOD(constructor, "writeInstagsSync",Write_Instags_Sync);
@@ -167,6 +168,54 @@ Handle<Value> UserState::Accounts(const Arguments& args){
     	result->Set(count++,account);
     }
     return scope.Close(result);
+}
+
+Handle<Value> UserState::Import_Key(const Arguments& args){
+    HandleScope scope;
+    UserState* us = ObjectWrap::Unwrap<UserState>(args.This());
+
+    //accountname
+    if(!args.Length() > 0 || !args[0]->IsString()){
+        return scope.Close(V8EXCEPTION("Invalid arguments"));
+    }
+    //protocol
+    if(!args.Length() > 1 || !args[1]->IsString()){
+        return scope.Close(V8EXCEPTION("Invalid arguments"));
+    }
+    //Unsigned Big Integer formatted, (base 10) strings
+    //p
+    if(!args.Length() > 2 || !args[2]->IsString()){
+        return scope.Close(V8EXCEPTION("Invalid arguments"));
+    }
+    //q
+    if(!args.Length() > 3 || !args[3]->IsString()){
+        return scope.Close(V8EXCEPTION("Invalid arguments"));
+    }
+    //g
+    if(!args.Length() > 4 || !args[4]->IsString()){
+        return scope.Close(V8EXCEPTION("Invalid arguments"));
+    }
+    //y
+    if(!args.Length() > 5 || !args[5]->IsString()){
+        return scope.Close(V8EXCEPTION("Invalid arguments"));
+    }
+    //x
+    if(!args.Length() > 6 || !args[6]->IsString()){
+        return scope.Close(V8EXCEPTION("Invalid arguments"));
+    }
+
+    gcry_error_t error;
+    String::Utf8Value accountname(args[0]->ToString());
+    String::Utf8Value protocol(args[1]->ToString());
+    String::Utf8Value p(args[2]->ToString());
+    String::Utf8Value q(args[3]->ToString());
+    String::Utf8Value g(args[4]->ToString());
+    String::Utf8Value y(args[5]->ToString());
+    String::Utf8Value x(args[6]->ToString());
+
+    error = jsapi_userstate_import_privkey(us->userstate_, *accountname, *protocol, *p, *q, *g, *y, *x);
+    if(error) return scope.Close(GCRY_EXCEPTION(error));
+    return scope.Close(Undefined());
 }
 
 Handle<Value> UserState::Read_Keys_Sync(const Arguments& args) {
