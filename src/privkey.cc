@@ -56,6 +56,7 @@ void PrivateKey::Init(Handle<Object> target) {
   NODE_SET_PROTOTYPE_ACCESSOR(constructor, "y", keyGetter,keySetter);
   NODE_SET_PROTOTYPE_ACCESSOR(constructor, "x", keyGetter,keySetter);
 
+  NODE_SET_PROTOTYPE_METHOD(constructor, "forget",Forget_Key);
   target->Set(name, constructor->GetFunction());
 }
 
@@ -72,6 +73,14 @@ v8::Handle<v8::Value> PrivateKey::WrapPrivateKey(OtrlPrivKey *privkey){
         PrivateKey *obj = node::ObjectWrap::Unwrap<PrivateKey>(o);
         obj->privkey_ = privkey;
         return o;
+}
+
+Handle<Value> PrivateKey::Forget_Key(const Arguments& args) {
+  HandleScope scope;
+  PrivateKey* obj = ObjectWrap::Unwrap<PrivateKey>(args.This());
+  otrl_privkey_forget(obj->privkey_);
+  obj->privkey_ = NULL;
+  return scope.Close(Undefined());
 }
 
 void PrivateKey::keySetter(Local<String> property, Local<Value> value, const AccessorInfo& info) {

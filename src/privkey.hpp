@@ -45,7 +45,7 @@ class PrivateKey : public node::ObjectWrap {
   static v8::Handle<v8::Value> WrapPrivateKey(OtrlPrivKey *privkey);
   static v8::Handle<v8::Value> keyGetter(v8::Local<v8::String> property, const v8::AccessorInfo& info);
   static void keySetter(v8::Local<v8::String> property, v8::Local<v8::Value> value, const v8::AccessorInfo& info);
-
+  static v8::Handle<v8::Value> Forget_Key(const v8::Arguments& args);
 };
 
 }
