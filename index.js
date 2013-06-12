@@ -416,7 +416,6 @@ function OTRL_MSGEVENT(e){
 
 
 function str2ab(str) {
-  console.log("converting str to ArrayBuffer");
   var buf = new ArrayBuffer(str.length*2); // 2 bytes for each char
   var bufView = new Uint16Array(buf);
   for (var i=0, strLen=str.length; i<strLen; i++) {
