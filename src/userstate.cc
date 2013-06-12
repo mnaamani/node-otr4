@@ -65,6 +65,7 @@ void UserState::Init(Handle<Object> target) {
   NODE_SET_PROTOTYPE_METHOD(constructor, "writeKeysSync",Write_Keys_Sync);
   NODE_SET_PROTOTYPE_METHOD(constructor, "deleteKeyOnFile",Delete_Key_On_File);
   NODE_SET_PROTOTYPE_METHOD(constructor, "findKey",Find_Key);
+  NODE_SET_PROTOTYPE_METHOD(constructor, "forgetAllKeys",Forget_All_Keys);
   NODE_SET_PROTOTYPE_METHOD(constructor, "importKey",Import_Key);
 
   NODE_SET_PROTOTYPE_METHOD(constructor, "readInstagsSync",Read_Instags_Sync);
@@ -572,6 +573,13 @@ Handle<Value> UserState::Find_Key(const Arguments& args) {
   OtrlPrivKey * privkey = otrl_privkey_find(obj->userstate_, *accountname, *protocol);
 
   if(privkey != NULL) return scope.Close(PrivateKey::WrapPrivateKey(privkey));
+  return scope.Close(Undefined());
+}
+
+Handle<Value> UserState::Forget_All_Keys(const Arguments& args) {
+  HandleScope scope;
+  UserState* obj = ObjectWrap::Unwrap<UserState>(args.This());
+  otrl_privkey_forget_all(obj->userstate_);
   return scope.Close(Undefined());
 }
 
