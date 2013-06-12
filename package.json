@@ -1,6 +1,6 @@
 {
     "name" : "otr4",
-    "version" : "0.0.0",
+    "version" : "0.0.1",
     "description" : "Off-the-Record Messaging Protocol [native libotr4.0.0]",
     "url" : "https://github.com/mnaamani/node-otr4",
     "keywords" : ["crypto","otr","privacy","off the record","otrm","protocol","encryption"],
