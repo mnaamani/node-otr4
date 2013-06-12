@@ -318,8 +318,10 @@ Session.prototype.isAuthenticated = function(){
     return (this.context.trust()==="smp");
 };
 Session.prototype.extraSymKey = function(use,usedata){
-    usedata = new Buffer(usedata);//convert a string or ArrayBuffer to a Buffer
-    return this.ops.extraSymKey(this.user.state,this.context,use,usedata);//returns a Buffer
+    var ab = (typeof usedata === 'string') ? str2ab(usedata) : usedata;
+    usedata = new Buffer(new Uint8Array(ab));
+    var buf = this.ops.extraSymKey(this.user.state,this.context,use,usedata);//returns a Buffer
+    return new Uint8Array(buf).buffer;
 };
 
 function OtrEventHandler( otrSession ){
@@ -358,7 +360,7 @@ function OtrEventHandler( otrSession ){
             emit(o.EVENT,o.event,o.message,o.err);
             return;
         case "create_instag":       emit(o.EVENT,o.accountname,o.protocol);return;
-        case "received_symkey":     emit(o.EVENT,o.use,o.usedata,o.key);return;
+        case "received_symkey":     emit(o.EVENT,o.use,(new Uint8Array(o.usedata)).buffer,(new Uint8Array(o.key)).buffer);return;
         case "remote_disconnected": emit(o.EVENT);return;
         default:
             console.error("== UNHANDLED EVENT == :",o.EVENT);
@@ -413,3 +415,12 @@ function OTRL_MSGEVENT(e){
 }
 
 
+function str2ab(str) {
+  console.log("converting str to ArrayBuffer");
+  var buf = new ArrayBuffer(str.length*2); // 2 bytes for each char
+  var bufView = new Uint16Array(buf);
+  for (var i=0, strLen=str.length; i<strLen; i++) {
+    bufView[i] = str.charCodeAt(i);
+  }
+  return buf;
+}

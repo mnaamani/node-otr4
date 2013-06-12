@@ -251,7 +251,7 @@ True only if the fingerprint of the buddy has been authenticated/verified by SMP
 * msg_event(event_no, message, err) - event_no, message if appropriate and an err if any.
 * received_symkey(use_num, usedata_buff, key_buff) - buddy wants to use the current extra symmetric key.
 buddy has sent additional use information and use-specific data in **use_num** (number) and **usedata_buff** (ArrayBuffer).
-**key_buff** is the 32-byte Buffer() holding the synchronised symmetric key.
+**key_buff** is the 32-byte ArrayBuffer() holding the synchronised symmetric key.
 
 ## otr.MSGEVENT(event_number)
 Returns one of the corresponding event names below of event_number
