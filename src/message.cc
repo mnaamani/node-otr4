@@ -136,7 +136,7 @@ Handle<Value> MessageAppOps::Message_Sending(const Arguments& args) {
   String::Utf8Value message(args[4]->ToString());
   int to_instag = args[5]->Int32Value();
   ConnectionCtx* ctx = node::ObjectWrap::Unwrap<ConnectionCtx>(args[6]->ToObject());
-  char *messagep;
+  char *messagep=NULL;
   gcry_error_t err = otrl_message_sending(user->userstate_, ops->messageops_,(void *)ops,
         *accountname, *protocol, *recipient, to_instag, *message,NULL, &messagep,OTRL_FRAGMENT_SEND_SKIP,&ctx->context_,NULL,NULL);
   if( err ){
@@ -152,7 +152,7 @@ Handle<Value> MessageAppOps::Message_Sending(const Arguments& args) {
 Handle<Value> MessageAppOps::Message_Receiving(const Arguments& args) {
   HandleScope scope;
   Handle<Value> retvalue;
-  char *newmessage;
+  char *newmessage =NULL;
   OtrlTLV *tlvs = NULL;
   OtrlTLV *tlv = NULL;
 

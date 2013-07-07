@@ -201,7 +201,7 @@ gcry_error_t jsapi_make_pubkey(unsigned char **pubbufp, size_t *publenp,
 gcry_error_t jsapi_userstate_import_privkey(OtrlUserState us, char *accountname, char * protocol, 
                     char *p, char *q, char *g, char *y, char *x){
 
-    size_t *erroff;
+    size_t *erroff=NULL;
     const char *token;
     size_t tokenlen;
     gcry_error_t err;
