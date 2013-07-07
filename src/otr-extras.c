@@ -209,9 +209,21 @@ gcry_error_t jsapi_userstate_import_privkey(OtrlUserState us, char *accountname,
 
     int i;
     //puts("jsapi_userstate_import_privkey: building sexp");
-    
+    gcry_mpi_t mp,mq,mg,my,mx;
+
+    err = gcry_mpi_scan(&mp,GCRYMPI_FMT_HEX,p,0,0);
+    if(err){gcry_mpi_release(mp); return err;}
+    err = gcry_mpi_scan(&mq,GCRYMPI_FMT_HEX,q,0,0);
+    if(err){gcry_mpi_release(mq); return err;}
+    err = gcry_mpi_scan(&mg,GCRYMPI_FMT_HEX,g,0,0);
+    if(err){gcry_mpi_release(mg); return err;}
+    err = gcry_mpi_scan(&my,GCRYMPI_FMT_HEX,y,0,0);
+    if(err){gcry_mpi_release(my); return err;}
+    err = gcry_mpi_scan(&mx,GCRYMPI_FMT_HEX,x,0,0);
+    if(err){gcry_mpi_release(mx); return err;}
+
     err = gcry_sexp_build(&allkeys,erroff,"(privkeys (account (name %s) (protocol %s) (private-key (dsa \
-        (p %s) (q %s) (g %s) (y %s) (x %s) ))))",accountname,protocol,p,q,g,y,x);
+        (p %M) (q %M) (g %M) (y %M) (x %M) ))))",accountname,protocol,mp,mq,mg,my,mx);
 
     if(err) return err;
     

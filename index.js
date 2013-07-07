@@ -216,7 +216,7 @@ User.prototype.importKey = function(accountname,protocol,dsa,base){
                 bi = null;
         }
         if(bi!=null) {
-            key[t] = BigInt.bigInt2str(bi,10);
+            key[t] = BigInt.bigInt2str(bi,16);
         }else doImport = false; 
     });
     
