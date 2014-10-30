@@ -20,7 +20,7 @@
 //load node C++ native module
 var otr=require("./build/Release/otrnat");
 
-if(otr.version()!="4.0.0"){
+if(otr.version()!="4.1.0"){
 	console.error("Warning. You are not using the latest version of libotr on your system.");
 }
 
