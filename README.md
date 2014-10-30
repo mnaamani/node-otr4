@@ -1,22 +1,23 @@
 ## OTR4 - Off-the-Record Messaging [native-bindings]
 
 This module exposes a simple evented API which wraps the native libotr installed.
-Supports only versions **v4.0.0** of the library.
+Supports only versions **v4.0.0** and above of the library.
 
-Only tested on Debian/Ubuntu. (If you can help to make it build on windows please do).
+Tested on Debian/Ubuntu and Mac OS X
 
-### Install pre-requisits:
+### Install pre-requisits
 
-    $ apt-get install make awk g++ nodejs nodejs-dev libotr5 libotr5-dev
-    $ npm install -g node-gyp
-	
-### Getting the Module through git:
+    npm install -g node-gyp
+    
+### Additional pre-requisits for debian,ubuntu:
 
-    git clone https://github.com/mnaamani/node-otr4.git node_modules/otr4
-    cd node_modules/otr4
-    npm install
+    apt-get install make awk g++ nodejs-dev libotr5 libotr5-dev
 
-### Getting the module directly from npm registry:
+### For Mac OS (you need brew and XCode)
+
+    brew install libotr
+
+### Install from npm registry:
 
     npm install otr4
 
