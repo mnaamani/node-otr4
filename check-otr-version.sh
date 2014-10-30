@@ -14,6 +14,6 @@ EOF
 if [ -e tmp.h ]
 then
  #prints the major version or 0 if libotr dev headers not found
- cc -E tmp.h 2>/dev/null | grep "otrl-version" | awk '{print $2}'
+ cc -E tmp.h -I/usr/local/include 2>/dev/null | grep "otrl-version" | awk '{print $2}'
  rm tmp.h
 fi
