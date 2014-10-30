@@ -14,5 +14,8 @@
     },
     "scripts":{
         "preinstall":"./build.sh"
+    },
+    "dependencies":{
+        "async":"*"
     }
 }
