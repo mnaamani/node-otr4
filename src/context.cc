@@ -21,7 +21,7 @@
 #include "cvv8/convert.hpp"
 
 extern "C"{
-    #include <libotr/privkey.h>
+	#include <libotr/privkey.h>
 }
 
 using namespace v8;
@@ -29,8 +29,8 @@ using namespace v8;
 namespace otr {
 v8::Persistent<v8::FunctionTemplate> ConnectionCtx::constructor;
 
-ConnectionCtx::ConnectionCtx(ConnContext* context) : ObjectWrap(), 
-    context_(context) {};
+ConnectionCtx::ConnectionCtx(ConnContext* context) : ObjectWrap(),
+	context_(context) {};
 
 ConnectionCtx::~ConnectionCtx() {};
 
@@ -68,25 +68,25 @@ Handle<Value> ConnectionCtx::New(const Arguments& args) {
   if(args.Length()==0){
 
   }else{
-      if(!args[0]->IsObject()){
-        return scope.Close(V8EXCEPTION("Invalid arguments. First argument 'userstate' (UserState) excpected."));
-      }
-      if(!args.Length() > 1 || !args[1]->IsString()){
-        return scope.Close(V8EXCEPTION("Invalid arguments. Second argument 'accountname' (string) excpected."));
-      }
-      if(!args.Length() > 2 || !args[2]->IsString()){
-        return scope.Close(V8EXCEPTION("Invalid arguments. Third argument 'protocol' (string) excpected."));
-      }
-      if(!args.Length() > 3 || !args[3]->IsString()){
-        return scope.Close(V8EXCEPTION("Invalid arguments. Fourth argument 'recipient' (string) excpected."));
-      }
+	  if(!args[0]->IsObject()){
+		return scope.Close(V8EXCEPTION("Invalid arguments. First argument 'userstate' (UserState) excpected."));
+	  }
+	  if(!args.Length() > 1 || !args[1]->IsString()){
+		return scope.Close(V8EXCEPTION("Invalid arguments. Second argument 'accountname' (string) excpected."));
+	  }
+	  if(!args.Length() > 2 || !args[2]->IsString()){
+		return scope.Close(V8EXCEPTION("Invalid arguments. Third argument 'protocol' (string) excpected."));
+	  }
+	  if(!args.Length() > 3 || !args[3]->IsString()){
+		return scope.Close(V8EXCEPTION("Invalid arguments. Fourth argument 'recipient' (string) excpected."));
+	  }
 
-      int addedp;
-      UserState* us = node::ObjectWrap::Unwrap<UserState>(args[0]->ToObject());
-      String::Utf8Value accountname(args[1]->ToString());
-      String::Utf8Value protocol(args[2]->ToString());
-      String::Utf8Value user(args[3]->ToString());
-      context = otrl_context_find(us->userstate_, *user,*accountname, *protocol, OTRL_INSTAG_MASTER, 1, &addedp, NULL,NULL);
+	  int addedp;
+	  UserState* us = node::ObjectWrap::Unwrap<UserState>(args[0]->ToObject());
+	  String::Utf8Value accountname(args[1]->ToString());
+	  String::Utf8Value protocol(args[2]->ToString());
+	  String::Utf8Value user(args[3]->ToString());
+	  context = otrl_context_find(us->userstate_, *user,*accountname, *protocol, OTRL_INSTAG_MASTER, 1, &addedp, NULL,NULL);
   }
   ConnectionCtx* obj = new ConnectionCtx(context);
   obj->Wrap(args.This());
@@ -94,62 +94,62 @@ Handle<Value> ConnectionCtx::New(const Arguments& args) {
   return scope.Close(args.This());
 }
 v8::Handle<v8::Value> ConnectionCtx::WrapConnectionCtx(ConnContext *context){
-        v8::Local<v8::Object> o = constructor->InstanceTemplate()->NewInstance();
-        ConnectionCtx *obj = node::ObjectWrap::Unwrap<ConnectionCtx>(o);
-        obj->context_ = context;
-        return o;
+		v8::Local<v8::Object> o = constructor->InstanceTemplate()->NewInstance();
+		ConnectionCtx *obj = node::ObjectWrap::Unwrap<ConnectionCtx>(o);
+		obj->context_ = context;
+		return o;
 }
 
 void ConnectionCtx::ctxSetter(Local<String> property, Local<Value> value, const AccessorInfo& info) {
 }
 
 Handle<Value> ConnectionCtx::ctxGetter(Local<String> property, const AccessorInfo& info) {
-    HandleScope scope;
-    ConnectionCtx* obj = node::ObjectWrap::Unwrap<ConnectionCtx>(info.This());      
-    ConnContext *ctx = obj->context_;
-    if(!ctx) return scope.Close(Undefined());
+	HandleScope scope;
+	ConnectionCtx* obj = node::ObjectWrap::Unwrap<ConnectionCtx>(info.This());
+	ConnContext *ctx = obj->context_;
+	if(!ctx) return scope.Close(Undefined());
 
-    std::string prop = cvv8::CastFromJS<std::string>(property);
+	std::string prop = cvv8::CastFromJS<std::string>(property);
 
-    IfStrEqual(prop,"protocol_"){
-        return scope.Close(String::New(ctx->protocol));
-    }
-    IfStrEqual(prop,"username_"){
-        return scope.Close(String::New(ctx->username));
-    }
-    IfStrEqual(prop,"accountname_"){
-        return scope.Close(String::New(ctx->accountname));
-    }
-    IfStrEqual(prop,"msgstate_"){
-        return scope.Close(Int32::New((unsigned int)ctx->msgstate));
-    }
-    IfStrEqual(prop,"protocol_version_"){
-        return scope.Close(Int32::New((unsigned int)ctx->protocol_version));
-    }
-    IfStrEqual(prop,"smstate_"){
-        return scope.Close(Int32::New((unsigned int)ctx->smstate->sm_prog_state));
-    }
-    IfStrEqual(prop,"fingerprint_"){
-        if(ctx->active_fingerprint==NULL) return scope.Close(Undefined());
-        char human[45];
-        otrl_privkey_hash_to_human(human, ctx->active_fingerprint->fingerprint);
-        return scope.Close(String::New(human));
-    }
-    IfStrEqual(prop,"trust_"){
-        if(ctx->active_fingerprint==NULL) return scope.Close(Undefined());
-        if(ctx->active_fingerprint->trust == NULL) return scope.Close(Undefined());
-        return scope.Close(String::New(ctx->active_fingerprint->trust));
-    }
-    IfStrEqual(prop,"their_instance_"){
-        return scope.Close(Number::New(ctx->their_instance));
-    }
-    IfStrEqual(prop,"our_instance_"){
-        return scope.Close(Number::New(ctx->our_instance));
-    }
-    IfStrEqual(prop,"master_"){
-        return scope.Close(WrapConnectionCtx(ctx->m_context));
-    }
-    return scope.Close(Undefined());
+	IfStrEqual(prop,"protocol_"){
+		return scope.Close(String::New(ctx->protocol));
+	}
+	IfStrEqual(prop,"username_"){
+		return scope.Close(String::New(ctx->username));
+	}
+	IfStrEqual(prop,"accountname_"){
+		return scope.Close(String::New(ctx->accountname));
+	}
+	IfStrEqual(prop,"msgstate_"){
+		return scope.Close(Int32::New((unsigned int)ctx->msgstate));
+	}
+	IfStrEqual(prop,"protocol_version_"){
+		return scope.Close(Int32::New((unsigned int)ctx->protocol_version));
+	}
+	IfStrEqual(prop,"smstate_"){
+		return scope.Close(Int32::New((unsigned int)ctx->smstate->sm_prog_state));
+	}
+	IfStrEqual(prop,"fingerprint_"){
+		if(ctx->active_fingerprint==NULL) return scope.Close(Undefined());
+		char human[45];
+		otrl_privkey_hash_to_human(human, ctx->active_fingerprint->fingerprint);
+		return scope.Close(String::New(human));
+	}
+	IfStrEqual(prop,"trust_"){
+		if(ctx->active_fingerprint==NULL) return scope.Close(Undefined());
+		if(ctx->active_fingerprint->trust == NULL) return scope.Close(Undefined());
+		return scope.Close(String::New(ctx->active_fingerprint->trust));
+	}
+	IfStrEqual(prop,"their_instance_"){
+		return scope.Close(Number::New(ctx->their_instance));
+	}
+	IfStrEqual(prop,"our_instance_"){
+		return scope.Close(Number::New(ctx->our_instance));
+	}
+	IfStrEqual(prop,"master_"){
+		return scope.Close(WrapConnectionCtx(ctx->m_context));
+	}
+	return scope.Close(Undefined());
 }
 
 }

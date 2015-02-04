@@ -20,26 +20,26 @@
 #include "otr.hpp"
 
 extern "C" {
-    GCRY_THREAD_OPTION_PTHREAD_IMPL;
-    #include <libotr/proto.h>
+	GCRY_THREAD_OPTION_PTHREAD_IMPL;
+	#include <libotr/proto.h>
 }
 
 
 namespace otr {
-    v8::Handle<v8::Value> Version(const v8::Arguments& args) {
-      v8::HandleScope scope;
-      return scope.Close(v8::String::New(otrl_version()));
-    }
+	v8::Handle<v8::Value> Version(const v8::Arguments& args) {
+	  v8::HandleScope scope;
+	  return scope.Close(v8::String::New(otrl_version()));
+	}
 }
 
 void RegisterModule(v8::Handle<v8::Object> target) {
   /* Version check should be the very first call because it
-      makes sure that important subsystems are intialized. */
+	  makes sure that important subsystems are intialized. */
   gcry_control (GCRYCTL_SET_THREAD_CBS, &gcry_threads_pthread);
   if (!gcry_check_version (GCRYPT_VERSION))
   {
-    fputs ("libgcrypt version mismatch\n", stderr);
-    exit (2);
+	fputs ("libgcrypt version mismatch\n", stderr);
+	exit (2);
   }
 
   gcry_control (GCRYCTL_INITIALIZATION_FINISHED, 0);
@@ -55,5 +55,3 @@ void RegisterModule(v8::Handle<v8::Object> target) {
 
 
 NODE_MODULE(otrnat, RegisterModule)
-
-

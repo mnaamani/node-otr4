@@ -23,8 +23,8 @@
 #include "otr.hpp"
 
 extern "C" {
-    #include <gcrypt.h>			//added for libotr-v4
-    #include <libotr/userstate.h>
+	#include <gcrypt.h>			//added for libotr-v4
+	#include <libotr/userstate.h>
 }
 
 namespace otr {
@@ -85,14 +85,14 @@ class UserState : public node::ObjectWrap {
 
 //information about the asynchronous "work request".
 struct Baton {
-    uv_work_t request;
-    bool hasCallback;
-    v8::Persistent<v8::Function> callback;
-    gcry_error_t error;
-    OtrlUserState  userstate;
-    std::string arg0;
-    std::string arg1;
-    std::string arg2;
+	uv_work_t request;
+	bool hasCallback;
+	v8::Persistent<v8::Function> callback;
+	gcry_error_t error;
+	OtrlUserState  userstate;
+	std::string arg0;
+	std::string arg1;
+	std::string arg2;
 };
 
 }

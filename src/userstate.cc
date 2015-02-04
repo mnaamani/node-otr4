@@ -21,8 +21,8 @@
 #include "cvv8/convert.hpp"
 
 extern "C" {
-    #include <libotr/privkey.h>
-    #include "otr-extras.h"
+	#include <libotr/privkey.h>
+	#include "otr-extras.h"
 }
 
 using namespace v8;
@@ -31,14 +31,14 @@ namespace otr {
 v8::Persistent<v8::FunctionTemplate> UserState::constructor;
 
 UserState::UserState(OtrlUserState userstate) : ObjectWrap(),
-      userstate_(userstate) {};
+	  userstate_(userstate) {};
 
 UserState::~UserState(){
-    if(!reference){
-        if(userstate_!=NULL) {
-            otrl_userstate_free(userstate_);
-        }
-    }
+	if(!reference){
+		if(userstate_!=NULL) {
+			otrl_userstate_free(userstate_);
+		}
+	}
 };
 
 void UserState::Init(Handle<Object> target) {
@@ -104,11 +104,11 @@ Handle<Value> UserState::Free(const Arguments &args){
 
 Handle<Value> UserState::WrapUserState(OtrlUserState userstate)
 {
-        v8::Local<v8::Object> o = constructor->InstanceTemplate()->NewInstance();
-        UserState *obj = node::ObjectWrap::Unwrap<UserState>(o);
-        obj->userstate_ = userstate;
-        obj->reference = true;
-        return o;
+		v8::Local<v8::Object> o = constructor->InstanceTemplate()->NewInstance();
+		UserState *obj = node::ObjectWrap::Unwrap<UserState>(o);
+		obj->userstate_ = userstate;
+		obj->reference = true;
+		return o;
 }
 
 Handle<Value> UserState::MessagePoll_DefaultInterval(const Arguments& args) {
@@ -134,7 +134,7 @@ Handle<Value> UserState::GetFingerprint(const Arguments& args) {
   UserState* obj = ObjectWrap::Unwrap<UserState>(args.This());
 
   if(!args.Length() > 1 || !args[0]->IsString() || !args[1]->IsString() ){
-    return scope.Close(V8EXCEPTION("Invalid arguments. First argument 'accountname' (string), second argument 'protocol' (string)."));
+	return scope.Close(V8EXCEPTION("Invalid arguments. First argument 'accountname' (string), second argument 'protocol' (string)."));
   }
 
   String::Utf8Value accountname(args[0]->ToString());
@@ -142,96 +142,96 @@ Handle<Value> UserState::GetFingerprint(const Arguments& args) {
 
   char fingerprint[45];
   if( otrl_privkey_fingerprint(obj->userstate_, fingerprint, *accountname, *protocol) ){
-      return scope.Close(String::New(fingerprint));
+	  return scope.Close(String::New(fingerprint));
   }
   return scope.Close(Undefined());
 }
 
 Handle<Value> UserState::MasterContexts(const Arguments& args){
-    HandleScope scope;
-    UserState* us = ObjectWrap::Unwrap<UserState>(args.This());
-    ConnContext *ctx;
-    int count=0;
-    v8::Local<v8::Array> result = v8::Array::New();
+	HandleScope scope;
+	UserState* us = ObjectWrap::Unwrap<UserState>(args.This());
+	ConnContext *ctx;
+	int count=0;
+	v8::Local<v8::Array> result = v8::Array::New();
 
-    for(ctx=us->userstate_->context_root; ctx; ctx=ctx->next) {
-        if (ctx->their_instance != OTRL_INSTAG_MASTER) continue;
+	for(ctx=us->userstate_->context_root; ctx; ctx=ctx->next) {
+		if (ctx->their_instance != OTRL_INSTAG_MASTER) continue;
 	result->Set(count++,ConnectionCtx::WrapConnectionCtx(ctx));
-    }
+	}
 
-    return scope.Close(result);
+	return scope.Close(result);
 }
 
 Handle<Value> UserState::Accounts(const Arguments& args){
-    HandleScope scope;
-    UserState* us = ObjectWrap::Unwrap<UserState>(args.This());
+	HandleScope scope;
+	UserState* us = ObjectWrap::Unwrap<UserState>(args.This());
 
-    OtrlPrivKey *p;
-    v8::Local<v8::Array> result = v8::Array::New();
-    int count=0;
-    char fingerprint[45];
-    Local<Object> account;
-    OtrlInsTag *instag;
-    for(p=us->userstate_->privkey_root; p; p=p->next) {
-        account = Object::New();
-   	    account->Set(String::NewSymbol("accountname"),String::New(p->accountname));
-        account->Set(String::NewSymbol("protocol"), String::New(p->protocol));
-        otrl_privkey_fingerprint(us->userstate_, fingerprint, p->accountname, p->protocol);
-        account->Set(String::NewSymbol("fingerprint"), String::New(fingerprint));
-        instag = otrl_instag_find(us->userstate_, p->accountname, p->protocol);
-        if(instag != NULL) account->Set(String::NewSymbol("instag"), Number::New(instag->instag));
-        account->Set(String::NewSymbol("privkey"), PrivateKey::WrapPrivateKey(p));
-    	result->Set(count++,account);
-    }
-    return scope.Close(result);
+	OtrlPrivKey *p;
+	v8::Local<v8::Array> result = v8::Array::New();
+	int count=0;
+	char fingerprint[45];
+	Local<Object> account;
+	OtrlInsTag *instag;
+	for(p=us->userstate_->privkey_root; p; p=p->next) {
+		account = Object::New();
+		   account->Set(String::NewSymbol("accountname"),String::New(p->accountname));
+		account->Set(String::NewSymbol("protocol"), String::New(p->protocol));
+		otrl_privkey_fingerprint(us->userstate_, fingerprint, p->accountname, p->protocol);
+		account->Set(String::NewSymbol("fingerprint"), String::New(fingerprint));
+		instag = otrl_instag_find(us->userstate_, p->accountname, p->protocol);
+		if(instag != NULL) account->Set(String::NewSymbol("instag"), Number::New(instag->instag));
+		account->Set(String::NewSymbol("privkey"), PrivateKey::WrapPrivateKey(p));
+		result->Set(count++,account);
+	}
+	return scope.Close(result);
 }
 
 Handle<Value> UserState::Import_PrivKey(const Arguments& args){
-    HandleScope scope;
-    UserState* us = ObjectWrap::Unwrap<UserState>(args.This());
+	HandleScope scope;
+	UserState* us = ObjectWrap::Unwrap<UserState>(args.This());
 
-    //accountname
-    if(!args.Length() > 0 || !args[0]->IsString()){
-        return scope.Close(V8EXCEPTION("Invalid arguments"));
-    }
-    //protocol
-    if(!args.Length() > 1 || !args[1]->IsString()){
-        return scope.Close(V8EXCEPTION("Invalid arguments"));
-    }
-    //Unsigned Big Integer formatted, (base 10) strings
-    //p
-    if(!args.Length() > 2 || !args[2]->IsString()){
-        return scope.Close(V8EXCEPTION("Invalid arguments"));
-    }
-    //q
-    if(!args.Length() > 3 || !args[3]->IsString()){
-        return scope.Close(V8EXCEPTION("Invalid arguments"));
-    }
-    //g
-    if(!args.Length() > 4 || !args[4]->IsString()){
-        return scope.Close(V8EXCEPTION("Invalid arguments"));
-    }
-    //y
-    if(!args.Length() > 5 || !args[5]->IsString()){
-        return scope.Close(V8EXCEPTION("Invalid arguments"));
-    }
-    //x
-    if(!args.Length() > 6 || !args[6]->IsString()){
-        return scope.Close(V8EXCEPTION("Invalid arguments"));
-    }
+	//accountname
+	if(!args.Length() > 0 || !args[0]->IsString()){
+		return scope.Close(V8EXCEPTION("Invalid arguments"));
+	}
+	//protocol
+	if(!args.Length() > 1 || !args[1]->IsString()){
+		return scope.Close(V8EXCEPTION("Invalid arguments"));
+	}
+	//Unsigned Big Integer formatted, (base 10) strings
+	//p
+	if(!args.Length() > 2 || !args[2]->IsString()){
+		return scope.Close(V8EXCEPTION("Invalid arguments"));
+	}
+	//q
+	if(!args.Length() > 3 || !args[3]->IsString()){
+		return scope.Close(V8EXCEPTION("Invalid arguments"));
+	}
+	//g
+	if(!args.Length() > 4 || !args[4]->IsString()){
+		return scope.Close(V8EXCEPTION("Invalid arguments"));
+	}
+	//y
+	if(!args.Length() > 5 || !args[5]->IsString()){
+		return scope.Close(V8EXCEPTION("Invalid arguments"));
+	}
+	//x
+	if(!args.Length() > 6 || !args[6]->IsString()){
+		return scope.Close(V8EXCEPTION("Invalid arguments"));
+	}
 
-    gcry_error_t error;
-    String::Utf8Value accountname(args[0]->ToString());
-    String::Utf8Value protocol(args[1]->ToString());
-    String::Utf8Value p(args[2]->ToString());
-    String::Utf8Value q(args[3]->ToString());
-    String::Utf8Value g(args[4]->ToString());
-    String::Utf8Value y(args[5]->ToString());
-    String::Utf8Value x(args[6]->ToString());
+	gcry_error_t error;
+	String::Utf8Value accountname(args[0]->ToString());
+	String::Utf8Value protocol(args[1]->ToString());
+	String::Utf8Value p(args[2]->ToString());
+	String::Utf8Value q(args[3]->ToString());
+	String::Utf8Value g(args[4]->ToString());
+	String::Utf8Value y(args[5]->ToString());
+	String::Utf8Value x(args[6]->ToString());
 
-    error = jsapi_userstate_import_privkey(us->userstate_, *accountname, *protocol, *p, *q, *g, *y, *x);
-    if(error) return scope.Close(GCRY_EXCEPTION(error));
-    return scope.Close(Undefined());
+	error = jsapi_userstate_import_privkey(us->userstate_, *accountname, *protocol, *p, *q, *g, *y, *x);
+	if(error) return scope.Close(GCRY_EXCEPTION(error));
+	return scope.Close(Undefined());
 }
 
 Handle<Value> UserState::Read_Keys_Sync(const Arguments& args) {
@@ -239,7 +239,7 @@ Handle<Value> UserState::Read_Keys_Sync(const Arguments& args) {
   UserState* obj = ObjectWrap::Unwrap<UserState>(args.This());
 
   if(!args.Length() > 0 || !args[0]->IsString()){
-    return scope.Close(V8EXCEPTION("Invalid arguments. One argument 'filename' (string) excpected."));
+	return scope.Close(V8EXCEPTION("Invalid arguments. One argument 'filename' (string) excpected."));
   }
   String::Utf8Value filename(args[0]->ToString());
 
@@ -255,13 +255,13 @@ Handle<Value> UserState::Read_Keys(const Arguments& args) {
   Local<Function> callback;
 
   if(!args.Length() > 0 || !args[0]->IsString()){
-    return scope.Close(V8EXCEPTION("Invalid arguments. First argument 'filename' (string) excpected."));
+	return scope.Close(V8EXCEPTION("Invalid arguments. First argument 'filename' (string) excpected."));
   }
   if(args.Length() > 1 && !args[1]->IsFunction()){
-    return scope.Close(V8EXCEPTION("Invalid arguments. Second argument 'callback' (function) excpected."));
+	return scope.Close(V8EXCEPTION("Invalid arguments. Second argument 'callback' (function) excpected."));
   }
   if(args.Length() > 1){
-    callback = Local<Function>::Cast(args[1]);
+	callback = Local<Function>::Cast(args[1]);
   }
 
   Baton* baton = new Baton();
@@ -288,7 +288,7 @@ Handle<Value> UserState::Write_Keys_Sync(const Arguments& args) {
   UserState* obj = ObjectWrap::Unwrap<UserState>(args.This());
 
   if(!args.Length() > 0 || !args[0]->IsString()){
-    return scope.Close(V8EXCEPTION("Invalid arguments. One argument 'filename' (string) excpected."));
+	return scope.Close(V8EXCEPTION("Invalid arguments. One argument 'filename' (string) excpected."));
   }
   String::Utf8Value filename(args[0]->ToString());
 
@@ -301,19 +301,19 @@ Handle<Value> UserState::Write_Keys_Sync(const Arguments& args) {
 Handle<Value> UserState::Delete_Key_On_File(const Arguments& args) {
   HandleScope scope;
   UserState* obj = ObjectWrap::Unwrap<UserState>(args.This());
-    if(!args.Length() > 0 || !args[0]->IsString()){
-    return scope.Close(V8EXCEPTION("Invalid arguments. First argument 'filename' (string) excpected."));
+	if(!args.Length() > 0 || !args[0]->IsString()){
+	return scope.Close(V8EXCEPTION("Invalid arguments. First argument 'filename' (string) excpected."));
   }
   if(!args.Length() > 1 || !args[1]->IsString()){
-    return scope.Close(V8EXCEPTION("Invalid arguments. Second argument 'accountname' (string) excpected."));
+	return scope.Close(V8EXCEPTION("Invalid arguments. Second argument 'accountname' (string) excpected."));
   }
   if(!args.Length() > 2 || !args[2]->IsString()){
-    return scope.Close(V8EXCEPTION("Invalid arguments. Third argument 'protocol' (string) excpected."));
+	return scope.Close(V8EXCEPTION("Invalid arguments. Third argument 'protocol' (string) excpected."));
   }
   String::Utf8Value filename(args[0]->ToString());
   String::Utf8Value accountname(args[1]->ToString());
   String::Utf8Value protocol(args[2]->ToString());
-  
+
   gcry_error_t error = jsapi_privkey_delete(obj->userstate_, *filename, *accountname, *protocol);
 
   if(error) return scope.Close(GCRY_EXCEPTION(error));
@@ -324,7 +324,7 @@ Handle<Value> UserState::Read_Fingerprints_Sync(const Arguments& args) {
   HandleScope scope;
   UserState* obj = ObjectWrap::Unwrap<UserState>(args.This());
   if(!args.Length() > 0 || !args[0]->IsString()){
-    return scope.Close(V8EXCEPTION("Invalid arguments. One argument 'filename' (string) excpected."));
+	return scope.Close(V8EXCEPTION("Invalid arguments. One argument 'filename' (string) excpected."));
   }
   String::Utf8Value filename(args[0]->ToString());
   gcry_error_t error = otrl_privkey_read_fingerprints(obj->userstate_, *filename, NULL, NULL);
@@ -339,13 +339,13 @@ Handle<Value> UserState::Read_Fingerprints(const Arguments& args) {
   Local<Function> callback;
 
   if(!args.Length() > 0 || !args[0]->IsString()){
-    return scope.Close(V8EXCEPTION("Invalid arguments. First argument 'filename' (string) excpected."));
+	return scope.Close(V8EXCEPTION("Invalid arguments. First argument 'filename' (string) excpected."));
   }
   if(args.Length() > 1 && !args[1]->IsFunction()){
-    return scope.Close(V8EXCEPTION("Invalid arguments. Second argument 'callback' (function) excpected."));
+	return scope.Close(V8EXCEPTION("Invalid arguments. Second argument 'callback' (function) excpected."));
   }
   if(args.Length() > 1){
-    callback = Local<Function>::Cast(args[1]);
+	callback = Local<Function>::Cast(args[1]);
   }
 
   Baton* baton = new Baton();
@@ -372,7 +372,7 @@ Handle<Value> UserState::Write_Fingerprints_Sync(const Arguments& args) {
   UserState* obj = ObjectWrap::Unwrap<UserState>(args.This());
 
   if(!args.Length() > 0 || !args[0]->IsString()){
-    return scope.Close(V8EXCEPTION("Invalid arguments. One argument 'filename' (string) excpected."));
+	return scope.Close(V8EXCEPTION("Invalid arguments. One argument 'filename' (string) excpected."));
   }
   String::Utf8Value filename(args[0]->ToString());
   gcry_error_t error = otrl_privkey_write_fingerprints(obj->userstate_, *filename);
@@ -387,13 +387,13 @@ Handle<Value> UserState::Write_Fingerprints(const Arguments& args) {
   Local<Function> callback;
 
   if(!args.Length() > 0 || !args[0]->IsString()){
-    return scope.Close(V8EXCEPTION("Invalid arguments. First argument 'filename' (string) excpected."));
+	return scope.Close(V8EXCEPTION("Invalid arguments. First argument 'filename' (string) excpected."));
   }
   if(args.Length() > 1 && !args[1]->IsFunction()){
-    return scope.Close(V8EXCEPTION("Invalid arguments. Second argument 'callback' (function) excpected."));
+	return scope.Close(V8EXCEPTION("Invalid arguments. Second argument 'callback' (function) excpected."));
   }
   if(args.Length() > 1){
-    callback = Local<Function>::Cast(args[1]);
+	callback = Local<Function>::Cast(args[1]);
   }
 
   Baton* baton = new Baton();
@@ -425,36 +425,36 @@ Handle<Value> UserState::Write_Trusted_Fingerprints_Sync(const Arguments& args) 
   gcry_error_t error;
 
   if(!args.Length() > 0 || !args[0]->IsString()){
-    return scope.Close(V8EXCEPTION("Invalid arguments. One argument 'filename' (string) excpected."));
+	return scope.Close(V8EXCEPTION("Invalid arguments. One argument 'filename' (string) excpected."));
   }
   String::Utf8Value filename(args[0]->ToString());
 
   error = gcry_error(GPG_ERR_NO_ERROR);
 
-    for(context = us->context_root; context; context = context->next) {
-      /* Fingerprints are only stored in the master contexts */
-      if (context->their_instance != OTRL_INSTAG_MASTER) continue;
-      
-      /* Don't bother with the first (fingerprintless) entry. */
-      for (fingerprint = context->fingerprint_root.next; fingerprint && fingerprint->trust[0]!='\0' ;
-        fingerprint = fingerprint->next) {
-        int i;
-        //only open the file if we have something to write
-        if(storef == NULL){
-             storef = fopen(*filename, "wb");
-            if(!storef) {
-                error = gcry_error_from_errno(errno);
-                return scope.Close(GCRY_EXCEPTION(error));
-            }
-        }
-        fprintf(storef, "%s\t%s\t%s\t", context->username,
-            context->accountname, context->protocol);
-        for(i=0;i<20;++i) {
-        fprintf(storef, "%02x", fingerprint->fingerprint[i]);
-        }
-        fprintf(storef, "\t%s\n", fingerprint->trust ? fingerprint->trust : "");
-      }
-    }
+	for(context = us->context_root; context; context = context->next) {
+	  /* Fingerprints are only stored in the master contexts */
+	  if (context->their_instance != OTRL_INSTAG_MASTER) continue;
+
+	  /* Don't bother with the first (fingerprintless) entry. */
+	  for (fingerprint = context->fingerprint_root.next; fingerprint && fingerprint->trust[0]!='\0' ;
+		fingerprint = fingerprint->next) {
+		int i;
+		//only open the file if we have something to write
+		if(storef == NULL){
+			 storef = fopen(*filename, "wb");
+			if(!storef) {
+				error = gcry_error_from_errno(errno);
+				return scope.Close(GCRY_EXCEPTION(error));
+			}
+		}
+		fprintf(storef, "%s\t%s\t%s\t", context->username,
+			context->accountname, context->protocol);
+		for(i=0;i<20;++i) {
+		fprintf(storef, "%02x", fingerprint->fingerprint[i]);
+		}
+		fprintf(storef, "\t%s\n", fingerprint->trust ? fingerprint->trust : "");
+	  }
+	}
   if(storef != NULL) fclose(storef);
   if(error) return scope.Close(GCRY_EXCEPTION(error));
   return scope.Close(Undefined());
@@ -464,7 +464,7 @@ Handle<Value> UserState::Read_Instags_Sync(const Arguments& args) {
   HandleScope scope;
   UserState* obj = ObjectWrap::Unwrap<UserState>(args.This());
   if(!args.Length() > 0 || !args[0]->IsString()){
-    return scope.Close(V8EXCEPTION("Invalid arguments. One argument 'filename' (string) excpected."));
+	return scope.Close(V8EXCEPTION("Invalid arguments. One argument 'filename' (string) excpected."));
   }
   String::Utf8Value filename(args[0]->ToString());
   gcry_error_t error = otrl_instag_read(obj->userstate_, *filename);
@@ -477,7 +477,7 @@ Handle<Value> UserState::Write_Instags_Sync(const Arguments& args) {
   HandleScope scope;
   UserState* obj = ObjectWrap::Unwrap<UserState>(args.This());
   if(!args.Length() > 0 || !args[0]->IsString()){
-    return scope.Close(V8EXCEPTION("Invalid arguments. One argument 'filename' (string) excpected."));
+	return scope.Close(V8EXCEPTION("Invalid arguments. One argument 'filename' (string) excpected."));
   }
   String::Utf8Value filename(args[0]->ToString());
   gcry_error_t error = otrl_instag_write(obj->userstate_, *filename);
@@ -489,19 +489,19 @@ Handle<Value> UserState::Write_Instags_Sync(const Arguments& args) {
 Handle<Value> UserState::Generate_Instag(const Arguments& args) {
   HandleScope scope;
   UserState* obj = ObjectWrap::Unwrap<UserState>(args.This());
-    if(!args.Length() > 0 || !args[0]->IsString()){
-    return scope.Close(V8EXCEPTION("Invalid arguments. First argument 'filename' (string) excpected."));
+	if(!args.Length() > 0 || !args[0]->IsString()){
+	return scope.Close(V8EXCEPTION("Invalid arguments. First argument 'filename' (string) excpected."));
   }
   if(!args.Length() > 1 || !args[1]->IsString()){
-    return scope.Close(V8EXCEPTION("Invalid arguments. Second argument 'accountname' (string) excpected."));
+	return scope.Close(V8EXCEPTION("Invalid arguments. Second argument 'accountname' (string) excpected."));
   }
   if(!args.Length() > 2 || !args[2]->IsString()){
-    return scope.Close(V8EXCEPTION("Invalid arguments. Third argument 'protocol' (string) excpected."));
+	return scope.Close(V8EXCEPTION("Invalid arguments. Third argument 'protocol' (string) excpected."));
   }
   String::Utf8Value filename(args[0]->ToString());
   String::Utf8Value accountname(args[1]->ToString());
   String::Utf8Value protocol(args[2]->ToString());
-  
+
   gcry_error_t error = otrl_instag_generate(obj->userstate_, *filename, *accountname, *protocol);
 
   if(error) return scope.Close(GCRY_EXCEPTION(error));
@@ -513,15 +513,15 @@ Handle<Value> UserState::Find_Instag(const Arguments& args) {
   UserState* obj = ObjectWrap::Unwrap<UserState>(args.This());
 
   if(!args.Length() > 0 || !args[0]->IsString()){
-    return scope.Close(V8EXCEPTION("Invalid arguments. First argument 'accountname' (string) excpected."));
+	return scope.Close(V8EXCEPTION("Invalid arguments. First argument 'accountname' (string) excpected."));
   }
   if(!args.Length() > 1 || !args[1]->IsString()){
-    return scope.Close(V8EXCEPTION("Invalid arguments. Second argument 'protocol' (string) excpected."));
+	return scope.Close(V8EXCEPTION("Invalid arguments. Second argument 'protocol' (string) excpected."));
   }
 
   String::Utf8Value accountname(args[0]->ToString());
   String::Utf8Value protocol(args[1]->ToString());
-  
+
   OtrlInsTag * instag = otrl_instag_find(obj->userstate_, *accountname, *protocol);
 
   if(instag != NULL) return scope.Close(Number::New(instag->instag));
@@ -535,19 +535,19 @@ Handle<Value> UserState::Generate_Key(const Arguments& args) {
   Local<Function> callback;
 
   if(!args.Length() > 0 || !args[0]->IsString()){
-    return scope.Close(V8EXCEPTION("Invalid arguments. First argument 'filename' (string) excpected."));
+	return scope.Close(V8EXCEPTION("Invalid arguments. First argument 'filename' (string) excpected."));
   }
   if(!args.Length() > 1 || !args[1]->IsString()){
-    return scope.Close(V8EXCEPTION("Invalid arguments. Second argument 'accountname' (string) excpected."));
+	return scope.Close(V8EXCEPTION("Invalid arguments. Second argument 'accountname' (string) excpected."));
   }
   if(!args.Length() > 2 || !args[2]->IsString()){
-    return scope.Close(V8EXCEPTION("Invalid arguments. Third argument 'protocol' (string) excpected."));
+	return scope.Close(V8EXCEPTION("Invalid arguments. Third argument 'protocol' (string) excpected."));
   }
   if(args.Length() > 3 && !args[3]->IsFunction()){
-    return scope.Close(V8EXCEPTION("Invalid arguments. Fourth argument 'callback' (function) excpected."));
+	return scope.Close(V8EXCEPTION("Invalid arguments. Fourth argument 'callback' (function) excpected."));
   }
   if(args.Length() > 3){
-    callback = Local<Function>::Cast(args[3]);
+	callback = Local<Function>::Cast(args[3]);
   }
 
   Baton* baton = new Baton();
@@ -576,15 +576,15 @@ Handle<Value> UserState::Find_Key(const Arguments& args) {
   UserState* obj = ObjectWrap::Unwrap<UserState>(args.This());
 
   if(!args.Length() > 0 || !args[0]->IsString()){
-    return scope.Close(V8EXCEPTION("Invalid arguments. First argument 'accountname' (string) excpected."));
+	return scope.Close(V8EXCEPTION("Invalid arguments. First argument 'accountname' (string) excpected."));
   }
   if(!args.Length() > 1 || !args[1]->IsString()){
-    return scope.Close(V8EXCEPTION("Invalid arguments. Second argument 'protocol' (string) excpected."));
+	return scope.Close(V8EXCEPTION("Invalid arguments. Second argument 'protocol' (string) excpected."));
   }
 
   String::Utf8Value accountname(args[0]->ToString());
   String::Utf8Value protocol(args[1]->ToString());
-  
+
   OtrlPrivKey * privkey = otrl_privkey_find(obj->userstate_, *accountname, *protocol);
 
   if(privkey != NULL) return scope.Close(PrivateKey::WrapPrivateKey(privkey));
@@ -599,33 +599,33 @@ Handle<Value> UserState::Forget_All_Keys(const Arguments& args) {
 }
 
 void UserState::Worker_After(uv_work_t* req) {
-    HandleScope scope;
-    Baton* baton = static_cast<Baton*>(req->data);
-    if(baton->hasCallback){
-        if (baton->error) {
-            Local<Value> err = Exception::Error(String::New(gcry_strerror(baton->error)));
-            const unsigned argc = 1;
-            Local<Value> argv[argc] = { err };
-            TryCatch try_catch;
-            baton->callback->Call(Context::GetCurrent()->Global(), argc, argv);
-            if (try_catch.HasCaught()) {
-                node::FatalException(try_catch);
-            }
-        } else {
-            const unsigned argc = 1;
-            Local<Value> argv[argc] = {
-                Local<Value>::New(Null())
-            };
-            TryCatch try_catch;
-            baton->callback->Call(Context::GetCurrent()->Global(), argc, argv);
-            if (try_catch.HasCaught()) {
-                node::FatalException(try_catch);
-            }
-        }
-    }
-    // The callback is a permanent handle, so we have to dispose of it manually.
-    baton->callback.Dispose();
-    delete baton;
+	HandleScope scope;
+	Baton* baton = static_cast<Baton*>(req->data);
+	if(baton->hasCallback){
+		if (baton->error) {
+			Local<Value> err = Exception::Error(String::New(gcry_strerror(baton->error)));
+			const unsigned argc = 1;
+			Local<Value> argv[argc] = { err };
+			TryCatch try_catch;
+			baton->callback->Call(Context::GetCurrent()->Global(), argc, argv);
+			if (try_catch.HasCaught()) {
+				node::FatalException(try_catch);
+			}
+		} else {
+			const unsigned argc = 1;
+			Local<Value> argv[argc] = {
+				Local<Value>::New(Null())
+			};
+			TryCatch try_catch;
+			baton->callback->Call(Context::GetCurrent()->Global(), argc, argv);
+			if (try_catch.HasCaught()) {
+				node::FatalException(try_catch);
+			}
+		}
+	}
+	// The callback is a permanent handle, so we have to dispose of it manually.
+	baton->callback.Dispose();
+	delete baton;
 }
 
 } //namespace otr

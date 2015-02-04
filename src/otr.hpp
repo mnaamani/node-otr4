@@ -39,7 +39,7 @@
 #define NODE_SET_PROTOTYPE_ACCESSOR(templ, name, getter, setter)          \
 do {                                                                      \
   templ->PrototypeTemplate()->SetAccessor(v8::String::NewSymbol(name),    \
-                                  getter, setter);                        \
+								  getter, setter);                        \
 } while (0)
 #endif
 
