@@ -66,7 +66,7 @@ void UserState::Init(Handle<Object> target) {
   NODE_SET_PROTOTYPE_METHOD(constructor, "deleteKeyOnFile",Delete_Key_On_File);
   NODE_SET_PROTOTYPE_METHOD(constructor, "findKey",Find_Key);
   NODE_SET_PROTOTYPE_METHOD(constructor, "forgetAllKeys",Forget_All_Keys);
-  NODE_SET_PROTOTYPE_METHOD(constructor, "importKey",Import_Key);
+  NODE_SET_PROTOTYPE_METHOD(constructor, "importPrivKey",Import_PrivKey);
 
   NODE_SET_PROTOTYPE_METHOD(constructor, "readInstagsSync",Read_Instags_Sync);
   NODE_SET_PROTOTYPE_METHOD(constructor, "writeInstagsSync",Write_Instags_Sync);
@@ -171,7 +171,7 @@ Handle<Value> UserState::Accounts(const Arguments& args){
     return scope.Close(result);
 }
 
-Handle<Value> UserState::Import_Key(const Arguments& args){
+Handle<Value> UserState::Import_PrivKey(const Arguments& args){
     HandleScope scope;
     UserState* us = ObjectWrap::Unwrap<UserState>(args.This());
 
