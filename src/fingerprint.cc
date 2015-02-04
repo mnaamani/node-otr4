@@ -85,6 +85,7 @@ Handle<Value> KeyFingerprint::fpGetter(Local<String> property, const AccessorInf
 		return scope.Close(String::New(human));
 	}
 	IfStrEqual(prop,"trust_"){
+		if(fp->trust == NULL) return scope.Close(Undefined());
 		return scope.Close(String::New(fp->trust));
 	}
 
