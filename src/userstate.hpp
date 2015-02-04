@@ -72,6 +72,7 @@ class UserState : public node::ObjectWrap {
   static v8::Handle<v8::Value> MessagePoll_DefaultInterval(const v8::Arguments& args);
   static v8::Handle<v8::Value> MessagePoll(const v8::Arguments& args);
   static v8::Handle<v8::Value> Free(const v8::Arguments& args);
+  static v8::Handle<v8::Value> MasterContexts(const v8::Arguments& args);
 
   //Workers
   static void Worker_Generate_Key (uv_work_t* req);

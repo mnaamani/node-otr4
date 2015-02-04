@@ -23,7 +23,7 @@
 #include "otr.hpp"
 
 extern "C" {
-    #include <libotr/context.h>
+	#include <libotr/context.h>
 }
 
 namespace otr {
@@ -35,17 +35,18 @@ class ConnectionCtx : public node::ObjectWrap {
 
  protected:
   friend class MessageAppOps;
+  friend class UserState;
   ConnContext* context_;
 
   ConnectionCtx(ConnContext* context);
-  ~ConnectionCtx();  
-    
+  ~ConnectionCtx();
+
   static v8::Handle<v8::Value> New(const v8::Arguments& args);
-  static v8::Handle<v8::Value> WrapConnectionCtx(ConnContext *context);  
+  static v8::Handle<v8::Value> WrapConnectionCtx(ConnContext *context);
   static v8::Handle<v8::Value> ctxGetter(v8::Local<v8::String> property, const v8::AccessorInfo& info);
   static void ctxSetter(v8::Local<v8::String> property, v8::Local<v8::Value> value, const v8::AccessorInfo& info);
-  
-  
+
+
 };
 
 }

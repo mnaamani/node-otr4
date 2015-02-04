@@ -79,7 +79,7 @@ void UserState::Init(Handle<Object> target) {
 
   NODE_SET_PROTOTYPE_METHOD(constructor, "getMessagePollDefaultInterval",MessagePoll_DefaultInterval);
   NODE_SET_PROTOTYPE_METHOD(constructor, "messagePoll",MessagePoll);
-
+  NODE_SET_PROTOTYPE_METHOD(constructor, "masterContexts",MasterContexts);
   NODE_SET_PROTOTYPE_METHOD(constructor, "free",Free);
 
   target->Set(name, constructor->GetFunction());
@@ -145,6 +145,21 @@ Handle<Value> UserState::GetFingerprint(const Arguments& args) {
       return scope.Close(String::New(fingerprint));
   }
   return scope.Close(Undefined());
+}
+
+Handle<Value> UserState::MasterContexts(const Arguments& args){
+    HandleScope scope;
+    UserState* us = ObjectWrap::Unwrap<UserState>(args.This());
+    ConnContext *ctx;
+    int count=0;
+    v8::Local<v8::Array> result = v8::Array::New();
+
+    for(ctx=us->userstate_->context_root; ctx; ctx=ctx->next) {
+        if (ctx->their_instance != OTRL_INSTAG_MASTER) continue;
+	result->Set(count++,ConnectionCtx::WrapConnectionCtx(ctx));
+    }
+
+    return scope.Close(result);
 }
 
 Handle<Value> UserState::Accounts(const Arguments& args){
