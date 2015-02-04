@@ -107,25 +107,25 @@ Handle<Value> MessageAppOps::Message_Sending(const Arguments& args) {
   Handle<Value> retvalue;
   MessageAppOps* ops = ObjectWrap::Unwrap<MessageAppOps>(args.This());
 
-  if(!args.Length() > 0 || !args[0]->IsObject()){
+  if(!(args.Length() > 0) || !args[0]->IsObject()){
 	return scope.Close(V8EXCEPTION("Invalid arguments. First argument 'userstate' (UserState) excpected."));
   }
-  if(!args.Length() > 1 || !args[1]->IsString()){
+  if(!(args.Length() > 1) || !args[1]->IsString()){
 	return scope.Close(V8EXCEPTION("Invalid arguments. Second argument 'accountname' (string) excpected."));
   }
-  if(!args.Length() > 2 || !args[2]->IsString()){
+  if(!(args.Length() > 2) || !args[2]->IsString()){
 	return scope.Close(V8EXCEPTION("Invalid arguments. Third argument 'protocol' (string) excpected."));
   }
-  if(!args.Length() > 3 || !args[3]->IsString()){
+  if(!(args.Length() > 3) || !args[3]->IsString()){
 	return scope.Close(V8EXCEPTION("Invalid arguments. Fourth argument 'recipient' (string) excpected."));
   }
-  if(!args.Length() > 4 || !args[4]->IsString()){
+  if(!(args.Length() > 4) || !args[4]->IsString()){
 	return scope.Close(V8EXCEPTION("Invalid arguments. Fifth argument 'message' (string) excpected."));
   }
-  if(!args.Length() > 5 || !args[5]->IsNumber()){
+  if(!(args.Length() > 5) || !args[5]->IsNumber()){
 	return scope.Close(V8EXCEPTION("Invalid arguments. Sixth argument 'instag' (number) excpected."));
   }
-  if(!args.Length() > 6 || !args[6]->IsObject()){
+  if(!(args.Length() > 6) || !args[6]->IsObject()){
 	return scope.Close(V8EXCEPTION("Invalid arguments. Seventh argument 'context' (ConnContext) excpected."));
   }
 
@@ -158,22 +158,22 @@ Handle<Value> MessageAppOps::Message_Receiving(const Arguments& args) {
 
   MessageAppOps* ops = ObjectWrap::Unwrap<MessageAppOps>(args.This());
 
-  if(!args.Length() > 0 || !args[0]->IsObject()){
+  if(!(args.Length() > 0) || !args[0]->IsObject()){
 	return scope.Close(V8EXCEPTION("Invalid arguments. First argument 'userstate' (UserState) excpected."));
   }
-  if(!args.Length() > 1 || !args[1]->IsString()){
+  if(!(args.Length() > 1) || !args[1]->IsString()){
 	return scope.Close(V8EXCEPTION("Invalid arguments. Second argument 'accountname' (string) excpected."));
   }
-  if(!args.Length() > 2 || !args[2]->IsString()){
+  if(!(args.Length() > 2) || !args[2]->IsString()){
 	return scope.Close(V8EXCEPTION("Invalid arguments. Third argument 'protocol' (string) excpected."));
   }
-  if(!args.Length() > 3 || !args[3]->IsString()){
+  if(!(args.Length() > 3) || !args[3]->IsString()){
 	return scope.Close(V8EXCEPTION("Invalid arguments. Fourth argument 'sender' (string) excpected."));
   }
-  if(!args.Length() > 4 || !args[4]->IsString()){
+  if(!(args.Length() > 4) || !args[4]->IsString()){
 	return scope.Close(V8EXCEPTION("Invalid arguments. Fifth argument 'message' (string) excpected."));
   }
-  if(!args.Length() > 5 || !args[5]->IsObject()){
+  if(!(args.Length() > 5) || !args[5]->IsObject()){
 	return scope.Close(V8EXCEPTION("Invalid arguments. Sixth argument 'context' (ConnContext) excpected."));
   }
   UserState* user = node::ObjectWrap::Unwrap<UserState>(args[0]->ToObject());
@@ -206,16 +206,16 @@ Handle<Value> MessageAppOps::Extra_Sym_Key(const Arguments& args) {
 
   MessageAppOps* ops = ObjectWrap::Unwrap<MessageAppOps>(args.This());
 
-  if(!args.Length() > 0 || !args[0]->IsObject()){
+  if(!(args.Length() > 0) || !args[0]->IsObject()){
 	return scope.Close(V8EXCEPTION("Invalid arguments. First argument 'userstate' (UserState) excpected."));
   }
-  if(!args.Length() > 1 || !args[1]->IsObject()){
+  if(!(args.Length() > 1) || !args[1]->IsObject()){
 	return scope.Close(V8EXCEPTION("Invalid arguments. Second argument 'context' (ConnContext) excpected."));
   }
-  if(!args.Length() > 2 || !args[2]->IsNumber()){
+  if(!(args.Length() > 2) || !args[2]->IsNumber()){
 	return scope.Close(V8EXCEPTION("Invalid arguments. Third argument 'use' (Number) excpected."));
   }
-  if(!args.Length() > 3 || !args[3]->IsObject()){
+  if(!(args.Length() > 3) || !args[3]->IsObject()){
 	return scope.Close(V8EXCEPTION("Invalid arguments. Fourth argument 'usedata' (Buffer) excpected."));
   }
   UserState* user = node::ObjectWrap::Unwrap<UserState>(args[0]->ToObject());
@@ -288,19 +288,19 @@ Handle<Value> MessageAppOps::Disconnect(const Arguments& args) {
   HandleScope scope;
   MessageAppOps* ops = ObjectWrap::Unwrap<MessageAppOps>(args.This());
 
-  if(!args.Length() > 0 || !args[0]->IsObject()){
+  if(!(args.Length() > 0) || !args[0]->IsObject()){
 	return scope.Close(V8EXCEPTION("Invalid arguments. First argument 'userstate' (UserState) excpected."));
   }
-  if(!args.Length() > 1 || !args[1]->IsString()){
+  if(!(args.Length() > 1) || !args[1]->IsString()){
 	return scope.Close(V8EXCEPTION("Invalid arguments. Second argument 'accountname' (string) excpected."));
   }
-  if(!args.Length() > 2 || !args[2]->IsString()){
+  if(!(args.Length() > 2) || !args[2]->IsString()){
 	return scope.Close(V8EXCEPTION("Invalid arguments. Third argument 'protocol' (string) excpected."));
   }
-  if(!args.Length() > 3 || !args[3]->IsString()){
+  if(!(args.Length() > 3) || !args[3]->IsString()){
 	return scope.Close(V8EXCEPTION("Invalid arguments. Fourth argument 'recipient' (string) excpected."));
   }
-  if(!args.Length() > 4 || !args[4]->IsNumber()){
+  if(!(args.Length() > 4) || !args[4]->IsNumber()){
 	return scope.Close(V8EXCEPTION("Invalid arguments. Fifth argument 'instag' (number) excpected."));
   }
 
@@ -317,13 +317,13 @@ Handle<Value> MessageAppOps::Initiate_SMP(const Arguments& args) {
   HandleScope scope;
   MessageAppOps* ops = ObjectWrap::Unwrap<MessageAppOps>(args.This());
 
-  if(!args.Length() > 0 || !args[0]->IsObject()){
+  if(!(args.Length() > 0) || !args[0]->IsObject()){
 	return scope.Close(V8EXCEPTION("Invalid arguments. First argument 'userstate' (UserState) excpected."));
   }
-  if(!args.Length() > 1 || !args[1]->IsObject()){
+  if(!(args.Length() > 1) || !args[1]->IsObject()){
 	return scope.Close(V8EXCEPTION("Invalid arguments. Second argument 'context' (ConnContext) excpected."));
   }
-  if(!args.Length() > 2 || !args[2]->IsString()){
+  if(!(args.Length() > 2) || !args[2]->IsString()){
 	return scope.Close(V8EXCEPTION("Invalid arguments. Third argument 'secret' (string) excpected."));
   }
   if(args.Length() > 3 && !args[3]->IsString()){
@@ -350,13 +350,13 @@ Handle<Value> MessageAppOps::Respond_SMP(const Arguments& args) {
   HandleScope scope;
   MessageAppOps* ops = ObjectWrap::Unwrap<MessageAppOps>(args.This());
 
-  if(!args.Length() > 0 || !args[0]->IsObject()){
+  if(!(args.Length() > 0) || !args[0]->IsObject()){
 	return scope.Close(V8EXCEPTION("Invalid arguments. First argument 'userstate' (UserState) excpected."));
   }
-  if(!args.Length() > 1 || !args[1]->IsObject()){
+  if(!(args.Length() > 1) || !args[1]->IsObject()){
 	return scope.Close(V8EXCEPTION("Invalid arguments. Second argument 'context' (ConnContext) excpected."));
   }
-  if(!args.Length() > 2 || !args[2]->IsString()){
+  if(!(args.Length() > 2) || !args[2]->IsString()){
 	return scope.Close(V8EXCEPTION("Invalid arguments. Third argument 'secret' (string) excpected."));
   }
 
@@ -373,10 +373,10 @@ Handle<Value> MessageAppOps::Abort_SMP(const Arguments& args) {
   HandleScope scope;
   MessageAppOps* ops = ObjectWrap::Unwrap<MessageAppOps>(args.This());
 
-  if(!args.Length() > 0 || !args[0]->IsObject()){
+  if(!(args.Length() > 0) || !args[0]->IsObject()){
 	return scope.Close(V8EXCEPTION("Invalid arguments. First argument 'userstate' (UserState) excpected."));
   }
-  if(!args.Length() > 1 || !args[1]->IsObject()){
+  if(!(args.Length() > 1) || !args[1]->IsObject()){
 	return scope.Close(V8EXCEPTION("Invalid arguments. Second argument 'context' (ConnContext) excpected."));
   }
 

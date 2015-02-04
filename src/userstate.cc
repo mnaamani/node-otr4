@@ -133,7 +133,7 @@ Handle<Value> UserState::GetFingerprint(const Arguments& args) {
   HandleScope scope;
   UserState* obj = ObjectWrap::Unwrap<UserState>(args.This());
 
-  if(!args.Length() > 1 || !args[0]->IsString() || !args[1]->IsString() ){
+  if(!(args.Length() > 1) || !args[0]->IsString() || !args[1]->IsString() ){
 	return scope.Close(V8EXCEPTION("Invalid arguments. First argument 'accountname' (string), second argument 'protocol' (string)."));
   }
 
@@ -191,32 +191,32 @@ Handle<Value> UserState::Import_PrivKey(const Arguments& args){
 	UserState* us = ObjectWrap::Unwrap<UserState>(args.This());
 
 	//accountname
-	if(!args.Length() > 0 || !args[0]->IsString()){
+	if(!(args.Length() > 0) || !args[0]->IsString()){
 		return scope.Close(V8EXCEPTION("Invalid arguments"));
 	}
 	//protocol
-	if(!args.Length() > 1 || !args[1]->IsString()){
+	if(!(args.Length() > 1) || !args[1]->IsString()){
 		return scope.Close(V8EXCEPTION("Invalid arguments"));
 	}
 	//Unsigned Big Integer formatted, (base 10) strings
 	//p
-	if(!args.Length() > 2 || !args[2]->IsString()){
+	if(!(args.Length() > 2) || !args[2]->IsString()){
 		return scope.Close(V8EXCEPTION("Invalid arguments"));
 	}
 	//q
-	if(!args.Length() > 3 || !args[3]->IsString()){
+	if(!(args.Length() > 3) || !args[3]->IsString()){
 		return scope.Close(V8EXCEPTION("Invalid arguments"));
 	}
 	//g
-	if(!args.Length() > 4 || !args[4]->IsString()){
+	if(!(args.Length() > 4) || !args[4]->IsString()){
 		return scope.Close(V8EXCEPTION("Invalid arguments"));
 	}
 	//y
-	if(!args.Length() > 5 || !args[5]->IsString()){
+	if(!(args.Length() > 5) || !args[5]->IsString()){
 		return scope.Close(V8EXCEPTION("Invalid arguments"));
 	}
 	//x
-	if(!args.Length() > 6 || !args[6]->IsString()){
+	if(!(args.Length() > 6) || !args[6]->IsString()){
 		return scope.Close(V8EXCEPTION("Invalid arguments"));
 	}
 
@@ -238,7 +238,7 @@ Handle<Value> UserState::Read_Keys_Sync(const Arguments& args) {
   HandleScope scope;
   UserState* obj = ObjectWrap::Unwrap<UserState>(args.This());
 
-  if(!args.Length() > 0 || !args[0]->IsString()){
+  if(!(args.Length() > 0) || !args[0]->IsString()){
 	return scope.Close(V8EXCEPTION("Invalid arguments. One argument 'filename' (string) excpected."));
   }
   String::Utf8Value filename(args[0]->ToString());
@@ -254,7 +254,7 @@ Handle<Value> UserState::Read_Keys(const Arguments& args) {
   UserState* obj = ObjectWrap::Unwrap<UserState>(args.This());
   Local<Function> callback;
 
-  if(!args.Length() > 0 || !args[0]->IsString()){
+  if(!(args.Length() > 0) || !args[0]->IsString()){
 	return scope.Close(V8EXCEPTION("Invalid arguments. First argument 'filename' (string) excpected."));
   }
   if(args.Length() > 1 && !args[1]->IsFunction()){
@@ -287,7 +287,7 @@ Handle<Value> UserState::Write_Keys_Sync(const Arguments& args) {
   HandleScope scope;
   UserState* obj = ObjectWrap::Unwrap<UserState>(args.This());
 
-  if(!args.Length() > 0 || !args[0]->IsString()){
+  if(!(args.Length() > 0) || !args[0]->IsString()){
 	return scope.Close(V8EXCEPTION("Invalid arguments. One argument 'filename' (string) excpected."));
   }
   String::Utf8Value filename(args[0]->ToString());
@@ -301,13 +301,13 @@ Handle<Value> UserState::Write_Keys_Sync(const Arguments& args) {
 Handle<Value> UserState::Delete_Key_On_File(const Arguments& args) {
   HandleScope scope;
   UserState* obj = ObjectWrap::Unwrap<UserState>(args.This());
-	if(!args.Length() > 0 || !args[0]->IsString()){
+	if(!(args.Length() > 0) || !args[0]->IsString()){
 	return scope.Close(V8EXCEPTION("Invalid arguments. First argument 'filename' (string) excpected."));
   }
-  if(!args.Length() > 1 || !args[1]->IsString()){
+  if(!(args.Length() > 1) || !args[1]->IsString()){
 	return scope.Close(V8EXCEPTION("Invalid arguments. Second argument 'accountname' (string) excpected."));
   }
-  if(!args.Length() > 2 || !args[2]->IsString()){
+  if(!(args.Length() > 2) || !args[2]->IsString()){
 	return scope.Close(V8EXCEPTION("Invalid arguments. Third argument 'protocol' (string) excpected."));
   }
   String::Utf8Value filename(args[0]->ToString());
@@ -323,7 +323,7 @@ Handle<Value> UserState::Delete_Key_On_File(const Arguments& args) {
 Handle<Value> UserState::Read_Fingerprints_Sync(const Arguments& args) {
   HandleScope scope;
   UserState* obj = ObjectWrap::Unwrap<UserState>(args.This());
-  if(!args.Length() > 0 || !args[0]->IsString()){
+  if(!(args.Length() > 0) || !args[0]->IsString()){
 	return scope.Close(V8EXCEPTION("Invalid arguments. One argument 'filename' (string) excpected."));
   }
   String::Utf8Value filename(args[0]->ToString());
@@ -338,7 +338,7 @@ Handle<Value> UserState::Read_Fingerprints(const Arguments& args) {
   UserState* obj = ObjectWrap::Unwrap<UserState>(args.This());
   Local<Function> callback;
 
-  if(!args.Length() > 0 || !args[0]->IsString()){
+  if(!(args.Length() > 0) || !args[0]->IsString()){
 	return scope.Close(V8EXCEPTION("Invalid arguments. First argument 'filename' (string) excpected."));
   }
   if(args.Length() > 1 && !args[1]->IsFunction()){
@@ -371,7 +371,7 @@ Handle<Value> UserState::Write_Fingerprints_Sync(const Arguments& args) {
   HandleScope scope;
   UserState* obj = ObjectWrap::Unwrap<UserState>(args.This());
 
-  if(!args.Length() > 0 || !args[0]->IsString()){
+  if(!(args.Length() > 0) || !args[0]->IsString()){
 	return scope.Close(V8EXCEPTION("Invalid arguments. One argument 'filename' (string) excpected."));
   }
   String::Utf8Value filename(args[0]->ToString());
@@ -386,7 +386,7 @@ Handle<Value> UserState::Write_Fingerprints(const Arguments& args) {
   UserState* obj = ObjectWrap::Unwrap<UserState>(args.This());
   Local<Function> callback;
 
-  if(!args.Length() > 0 || !args[0]->IsString()){
+  if(!(args.Length() > 0) || !args[0]->IsString()){
 	return scope.Close(V8EXCEPTION("Invalid arguments. First argument 'filename' (string) excpected."));
   }
   if(args.Length() > 1 && !args[1]->IsFunction()){
@@ -424,7 +424,7 @@ Handle<Value> UserState::Write_Trusted_Fingerprints_Sync(const Arguments& args) 
   Fingerprint *fingerprint;
   gcry_error_t error;
 
-  if(!args.Length() > 0 || !args[0]->IsString()){
+  if(!(args.Length() > 0) || !args[0]->IsString()){
 	return scope.Close(V8EXCEPTION("Invalid arguments. One argument 'filename' (string) excpected."));
   }
   String::Utf8Value filename(args[0]->ToString());
@@ -463,7 +463,7 @@ Handle<Value> UserState::Write_Trusted_Fingerprints_Sync(const Arguments& args) 
 Handle<Value> UserState::Read_Instags_Sync(const Arguments& args) {
   HandleScope scope;
   UserState* obj = ObjectWrap::Unwrap<UserState>(args.This());
-  if(!args.Length() > 0 || !args[0]->IsString()){
+  if(!(args.Length() > 0) || !args[0]->IsString()){
 	return scope.Close(V8EXCEPTION("Invalid arguments. One argument 'filename' (string) excpected."));
   }
   String::Utf8Value filename(args[0]->ToString());
@@ -476,7 +476,7 @@ Handle<Value> UserState::Read_Instags_Sync(const Arguments& args) {
 Handle<Value> UserState::Write_Instags_Sync(const Arguments& args) {
   HandleScope scope;
   UserState* obj = ObjectWrap::Unwrap<UserState>(args.This());
-  if(!args.Length() > 0 || !args[0]->IsString()){
+  if(!(args.Length() > 0) || !args[0]->IsString()){
 	return scope.Close(V8EXCEPTION("Invalid arguments. One argument 'filename' (string) excpected."));
   }
   String::Utf8Value filename(args[0]->ToString());
@@ -489,13 +489,13 @@ Handle<Value> UserState::Write_Instags_Sync(const Arguments& args) {
 Handle<Value> UserState::Generate_Instag(const Arguments& args) {
   HandleScope scope;
   UserState* obj = ObjectWrap::Unwrap<UserState>(args.This());
-	if(!args.Length() > 0 || !args[0]->IsString()){
+	if(!(args.Length() > 0) || !args[0]->IsString()){
 	return scope.Close(V8EXCEPTION("Invalid arguments. First argument 'filename' (string) excpected."));
   }
-  if(!args.Length() > 1 || !args[1]->IsString()){
+  if(!(args.Length() > 1) || !args[1]->IsString()){
 	return scope.Close(V8EXCEPTION("Invalid arguments. Second argument 'accountname' (string) excpected."));
   }
-  if(!args.Length() > 2 || !args[2]->IsString()){
+  if(!(args.Length() > 2) || !args[2]->IsString()){
 	return scope.Close(V8EXCEPTION("Invalid arguments. Third argument 'protocol' (string) excpected."));
   }
   String::Utf8Value filename(args[0]->ToString());
@@ -512,10 +512,10 @@ Handle<Value> UserState::Find_Instag(const Arguments& args) {
   HandleScope scope;
   UserState* obj = ObjectWrap::Unwrap<UserState>(args.This());
 
-  if(!args.Length() > 0 || !args[0]->IsString()){
+  if(!(args.Length() > 0) || !args[0]->IsString()){
 	return scope.Close(V8EXCEPTION("Invalid arguments. First argument 'accountname' (string) excpected."));
   }
-  if(!args.Length() > 1 || !args[1]->IsString()){
+  if(!(args.Length() > 1) || !args[1]->IsString()){
 	return scope.Close(V8EXCEPTION("Invalid arguments. Second argument 'protocol' (string) excpected."));
   }
 
@@ -534,13 +534,13 @@ Handle<Value> UserState::Generate_Key(const Arguments& args) {
   UserState* obj = ObjectWrap::Unwrap<UserState>(args.This());
   Local<Function> callback;
 
-  if(!args.Length() > 0 || !args[0]->IsString()){
+  if(!(args.Length() > 0) || !args[0]->IsString()){
 	return scope.Close(V8EXCEPTION("Invalid arguments. First argument 'filename' (string) excpected."));
   }
-  if(!args.Length() > 1 || !args[1]->IsString()){
+  if(!(args.Length() > 1) || !args[1]->IsString()){
 	return scope.Close(V8EXCEPTION("Invalid arguments. Second argument 'accountname' (string) excpected."));
   }
-  if(!args.Length() > 2 || !args[2]->IsString()){
+  if(!(args.Length() > 2) || !args[2]->IsString()){
 	return scope.Close(V8EXCEPTION("Invalid arguments. Third argument 'protocol' (string) excpected."));
   }
   if(args.Length() > 3 && !args[3]->IsFunction()){
@@ -575,10 +575,10 @@ Handle<Value> UserState::Find_Key(const Arguments& args) {
   HandleScope scope;
   UserState* obj = ObjectWrap::Unwrap<UserState>(args.This());
 
-  if(!args.Length() > 0 || !args[0]->IsString()){
+  if(!(args.Length() > 0) || !args[0]->IsString()){
 	return scope.Close(V8EXCEPTION("Invalid arguments. First argument 'accountname' (string) excpected."));
   }
-  if(!args.Length() > 1 || !args[1]->IsString()){
+  if(!(args.Length() > 1) || !args[1]->IsString()){
 	return scope.Close(V8EXCEPTION("Invalid arguments. Second argument 'protocol' (string) excpected."));
   }
 

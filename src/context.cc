@@ -71,13 +71,13 @@ Handle<Value> ConnectionCtx::New(const Arguments& args) {
 	  if(!args[0]->IsObject()){
 		return scope.Close(V8EXCEPTION("Invalid arguments. First argument 'userstate' (UserState) excpected."));
 	  }
-	  if(!args.Length() > 1 || !args[1]->IsString()){
+	  if(!(args.Length() > 1) || !args[1]->IsString()){
 		return scope.Close(V8EXCEPTION("Invalid arguments. Second argument 'accountname' (string) excpected."));
 	  }
-	  if(!args.Length() > 2 || !args[2]->IsString()){
+	  if(!(args.Length() > 2) || !args[2]->IsString()){
 		return scope.Close(V8EXCEPTION("Invalid arguments. Third argument 'protocol' (string) excpected."));
 	  }
-	  if(!args.Length() > 3 || !args[3]->IsString()){
+	  if(!(args.Length() > 3) || !args[3]->IsString()){
 		return scope.Close(V8EXCEPTION("Invalid arguments. Fourth argument 'recipient' (string) excpected."));
 	  }
 
