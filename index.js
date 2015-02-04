@@ -20,20 +20,19 @@
  */
 
 //load node C++ native module
-var otrlib = require("./build/Release/otrnat");
+var libotr = require("./build/Release/otrnat");
 
 // Add some methods to native objects
-require("./lib/extend-native.js").extend(otrlib);
+require("./lib/extend-native.js").extend(libotr);
 
-if (otrlib.version() != "4.1.0") {
+if (libotr.version() != "4.1.0") {
 	console.error("Warning. You are not using the latest version of libotr on your system.");
 }
 
-exports.version = otrlib.version;
+exports.version = libotr.version;
 exports.User = require("./lib/User.js").User;
 exports.Account = require("./lib/Account.js").Account;
 exports.Session = require("./lib/Session.js").Session;
 exports.Contact = require("./lib/Contact.js").Contact;
-exports.ConnContext = otrlib.ConnContext;
 exports.POLICY = require("./lib/POLICY.js");
 exports.MSGEVENT = require("./lib/MSGEVENT.js");
