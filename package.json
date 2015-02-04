@@ -1,21 +1,23 @@
 {
-    "name" : "otr4",
-    "version" : "0.0.5",
-    "description" : "OTR Messaging Protocol [native libotr4.x.x]",
-    "url" : "https://github.com/mnaamani/node-otr4",
-    "keywords" : ["crypto","otr","privacy","off the record","OTR","protocol","encryption"],
-    "author" : "Mokhtar Naamani <mokhtar.naamani@gmail.com>",
-    "main" : "index.js",
-    "license": "GPLv2",
-    "engines" : { "node" : ">=0.6.0" },
-    "repository":{
-        "type":"git",
-        "url":"git@github.com:mnaamani/node-otr4.git"
-    },
-    "scripts":{
-        "preinstall":"./build.sh"
-    },
-    "dependencies":{
-        "async":"*"
-    }
+	"name": "otr4",
+	"version": "0.0.5",
+	"description": "OTR Messaging Protocol [native libotr4.x.x]",
+	"url": "https://github.com/mnaamani/node-otr4",
+	"keywords": ["crypto", "otr", "privacy", "off the record", "OTR", "protocol", "encryption"],
+	"author": "Mokhtar Naamani <mokhtar.naamani@gmail.com>",
+	"main": "index.js",
+	"license": "GPLv2",
+	"engines": {
+		"node": ">=0.6.0"
+	},
+	"repository": {
+		"type": "git",
+		"url": "git@github.com:mnaamani/node-otr4.git"
+	},
+	"scripts": {
+		"preinstall": "./build.sh"
+	},
+	"devDependencies": {
+		"async": "*"
+	}
 }
