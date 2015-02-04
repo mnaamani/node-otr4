@@ -59,6 +59,8 @@ void ConnectionCtx::Init(Handle<Object> target) {
   NODE_SET_PROTOTYPE_ACCESSOR(constructor, "our_instance_", ctxGetter,ctxSetter);
   NODE_SET_PROTOTYPE_ACCESSOR(constructor, "master_", ctxGetter,ctxSetter);
 
+  NODE_SET_PROTOTYPE_METHOD(constructor, "masterFingerprints",MasterFingerprints);
+
   target->Set(name, constructor->GetFunction());
 }
 
@@ -98,6 +100,21 @@ v8::Handle<v8::Value> ConnectionCtx::WrapConnectionCtx(ConnContext *context){
 		ConnectionCtx *obj = node::ObjectWrap::Unwrap<ConnectionCtx>(o);
 		obj->context_ = context;
 		return o;
+}
+
+Handle<Value> ConnectionCtx::MasterFingerprints(const Arguments& args){
+	HandleScope scope;
+	ConnectionCtx *obj = ObjectWrap::Unwrap<ConnectionCtx>(args.This());
+	ConnContext *ctx = obj->context_;
+	Fingerprint *fp;
+	int count=0;
+	v8::Local<v8::Array> result = v8::Array::New();
+
+	for(fp=ctx->m_context->fingerprint_root.next; fp; fp=fp->next) {
+		result->Set(count++, KeyFingerprint::WrapKeyFingerprint(fp));
+	}
+
+	return scope.Close(result);
 }
 
 void ConnectionCtx::ctxSetter(Local<String> property, Local<Value> value, const AccessorInfo& info) {
@@ -148,6 +165,10 @@ Handle<Value> ConnectionCtx::ctxGetter(Local<String> property, const AccessorInf
 	}
 	IfStrEqual(prop,"master_"){
 		return scope.Close(WrapConnectionCtx(ctx->m_context));
+	}
+
+	IfStrEqual(prop,"master_fingerprint_root_"){
+		return scope.Close(KeyFingerprint::WrapKeyFingerprint(ctx->m_context->fingerprint_root.next));
 	}
 	return scope.Close(Undefined());
 }

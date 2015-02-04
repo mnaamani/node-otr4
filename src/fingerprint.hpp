@@ -17,8 +17,8 @@
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#ifndef __NODE_OTR_CONNCONTEXT_H__
-#define __NODE_OTR_CONNCONTEXT_H__
+#ifndef __NODE_OTR_FINGERPRINT_H__
+#define __NODE_OTR_FINGERPRINT_H__
 
 #include "otr.hpp"
 
@@ -28,24 +28,22 @@ extern "C" {
 
 namespace otr {
 
-class ConnectionCtx : public node::ObjectWrap {
+class KeyFingerprint : public node::ObjectWrap {
  public:
   static void Init(v8::Handle<v8::Object> target);
   static v8::Persistent<v8::FunctionTemplate> constructor;
 
  protected:
-  friend class MessageAppOps;
-  friend class UserState;
-  ConnContext* context_;
+  friend class ConnectionCtx;
+  Fingerprint* fingerprint_;
 
-  ConnectionCtx(ConnContext* context);
-  ~ConnectionCtx();
+  KeyFingerprint(Fingerprint* fp);
+  ~KeyFingerprint();
 
   static v8::Handle<v8::Value> New(const v8::Arguments& args);
-  static v8::Handle<v8::Value> WrapConnectionCtx(ConnContext *context);
-  static v8::Handle<v8::Value> MasterFingerprints(const v8::Arguments& args);
-  static v8::Handle<v8::Value> ctxGetter(v8::Local<v8::String> property, const v8::AccessorInfo& info);
-  static void ctxSetter(v8::Local<v8::String> property, v8::Local<v8::Value> value, const v8::AccessorInfo& info);
+  static v8::Handle<v8::Value> WrapKeyFingerprint(Fingerprint *fp);
+  static v8::Handle<v8::Value> fpGetter(v8::Local<v8::String> property, const v8::AccessorInfo& info);
+  static void fpSetter(v8::Local<v8::String> property, v8::Local<v8::Value> value, const v8::AccessorInfo& info);
 
 
 };

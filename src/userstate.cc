@@ -156,7 +156,7 @@ Handle<Value> UserState::MasterContexts(const Arguments& args){
 
 	for(ctx=us->userstate_->context_root; ctx; ctx=ctx->next) {
 		if (ctx->their_instance != OTRL_INSTAG_MASTER) continue;
-	result->Set(count++,ConnectionCtx::WrapConnectionCtx(ctx));
+		result->Set(count++,ConnectionCtx::WrapConnectionCtx(ctx));
 	}
 
 	return scope.Close(result);

@@ -51,6 +51,7 @@ void RegisterModule(v8::Handle<v8::Object> target) {
   otr::ConnectionCtx::Init(target);
   otr::MessageAppOps::Init(target);
   otr::PrivateKey::Init(target);
+  otr::KeyFingerprint::Init(target);
 }
 
 
