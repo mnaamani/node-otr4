@@ -29,7 +29,11 @@ if (libotr.version() != "4.1.0") {
 	console.error("Warning. You are not using the latest version of libotr on your system.");
 }
 
+/** @method
+ *  @returns {String} libotr version information
+ */
 exports.version = libotr.version;
+
 exports.User = require("./lib/User.js").User;
 exports.Account = require("./lib/Account.js").Account;
 exports.Session = require("./lib/Session.js").Session;
