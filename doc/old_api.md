@@ -1,6 +1,8 @@
 OTR4 - Off-the-Record Messaging
 =====================
 
+This is the documentation for old API, for npm module "otr4" version 0.0.5
+
 ## Getting started
 
 Require the otr4 module (underlying gcrypt and otr libraries will be

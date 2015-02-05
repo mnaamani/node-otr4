@@ -7,26 +7,28 @@ Tested on Debian/Ubuntu and Mac OS X
 
 ### Install pre-requisits
 
-    npm install -g node-gyp
-    
+	npm install -g node-gyp
+
 ### Additional pre-requisits for debian,ubuntu:
 
-    apt-get install make awk g++ nodejs-dev libotr5 libotr5-dev
+	apt-get install make awk g++ nodejs-dev libotr5 libotr5-dev
 
 ### For Mac OS (you need brew and XCode)
 
-    brew install libotr
+	brew install libotr
 
 ### Install from npm registry:
 
-    npm install otr4
+	npm install otr4
 
 If the install fails because compiling failed, check that you have all the pre-requisists installed.
 After resolving the problem you must reinstall the module:
 
-    npm install otr4 --force
+	npm install otr4 --force
 
-[API Documentation](https://github.com/mnaamani/node-otr4/blob/master/doc/API.md)
+[API Documentation](http://www.mokhtar.net/projects/otr4/docs/)
+[Quick Tutorial](https://github.com/mnaamani/node-otr4/blob/master/doc/tutorial.md)
+
 
 ### License
 GPLv2
