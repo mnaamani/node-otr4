@@ -7,20 +7,21 @@ var user = new otr.User({
 		instags: "./bob.instags"
 	}),
 	account = user.account("bob@telechat.org", "telechat"),
-	contact = account.contact("alice");
+	contact = account.contact("ALICE");
 
 if (!account.fingerprint()) {
-	console.log("no key found");
+	console.log("no key found, run keygen.js to generate keys for this example.");
 	process.exit();
 }
-account.generateInstag();
+
+if (!account.instag()) account.generateInstag();
+
 console.log("connecting...");
 
 var conn = new net.Socket();
 var session = contact.openSession();
 
 session.online = function () {
-	console.log("checking if contact is online..");
 	if (conn && conn.remotePort) {
 		return true;
 	}

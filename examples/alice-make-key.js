@@ -3,8 +3,6 @@ var fs = require("fs");
 
 var print = console.error;
 
-print("libotr version:", otr.version());
-
 var user = new otr.User({
 	keys: './alice.keys',
 	fingerprints: __dirname,

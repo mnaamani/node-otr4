@@ -75,8 +75,7 @@ dumpFingerprints(ALICE.fingerprints());
 var session_b = ALICE.openSession({
 	policy: otr.POLICY.DEFAULT,
 	secret: 's3cr37',
-	MTU: 3000,
-	debug: true
+	MTU: 3000
 });
 
 
@@ -105,31 +104,14 @@ session_b.on("inject_message", function (msg) {
 });
 
 session_a.on("create_privkey", function (a, p) {
-	debug("Alice doesn't have a key.. creating a new key for:", a, p);
-	alice_account.generateKey(function (err, key) {
-		if (!err) {
-			debug("Alice's Key Generated Successfully");
-			try {
-				alice.saveKeysToFS("./alice.keys");
-			} catch (e) {
-				debug("not saving keys.. in browser");
-			}
-		}
-	});
+	debug("Alice doesn't have a key.. run keygen.js to generate keys for this example.");
+	process.exit();
 });
 session_b.on("create_privkey", function (a, p) {
-	debug("Bob doesn't have a key.. creating a new key for:", a, p);
-	bob_account.generateKey(function (err, key) {
-		if (!err) {
-			debug("Bob's Key Generated Successfully");
-			try {
-				bob.saveKeysToFS("./bob.keys");
-			} catch (e) {
-				debug("not saving keys.. in browser");
-			}
-		}
-	});
+	debug("Bob doesn't have a key.. run keygen.js to generate keys for this example.");
+	process.exit();
 });
+
 session_a.on("create_instag", function (a, p) {
 	alice_account.generateInstag();
 });
