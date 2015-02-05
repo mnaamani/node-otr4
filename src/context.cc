@@ -60,6 +60,7 @@ void ConnectionCtx::Init(Handle<Object> target) {
   NODE_SET_PROTOTYPE_ACCESSOR(constructor, "master_", ctxGetter,ctxSetter);
 
   NODE_SET_PROTOTYPE_METHOD(constructor, "masterFingerprints",MasterFingerprints);
+  NODE_SET_PROTOTYPE_METHOD(constructor, "forget",Forget);
 
   target->Set(name, constructor->GetFunction());
 }
@@ -102,12 +103,23 @@ v8::Handle<v8::Value> ConnectionCtx::WrapConnectionCtx(ConnContext *context){
 		return o;
 }
 
+Handle<Value> ConnectionCtx::Forget(const Arguments& args){
+	HandleScope scope;
+	ConnectionCtx *obj = ObjectWrap::Unwrap<ConnectionCtx>(args.This());
+	ConnContext *ctx = obj->context_;
+	obj->context_ = NULL;
+	return scope.Close(Number::New(otrl_context_forget(ctx)));
+}
+
 Handle<Value> ConnectionCtx::MasterFingerprints(const Arguments& args){
 	HandleScope scope;
 	ConnectionCtx *obj = ObjectWrap::Unwrap<ConnectionCtx>(args.This());
 	ConnContext *ctx = obj->context_;
 	Fingerprint *fp;
 	int count=0;
+
+	if(!ctx) return scope.Close(Undefined());
+
 	v8::Local<v8::Array> result = v8::Array::New();
 
 	for(fp=ctx->m_context->fingerprint_root.next; fp; fp=fp->next) {

@@ -50,6 +50,8 @@ void KeyFingerprint::Init(Handle<Object> target) {
   NODE_SET_PROTOTYPE_ACCESSOR(constructor, "human_", fpGetter,fpSetter);
   NODE_SET_PROTOTYPE_ACCESSOR(constructor, "trust_", fpGetter,fpSetter);
 
+  NODE_SET_PROTOTYPE_METHOD(constructor, "forget",Forget);
+
   target->Set(name, constructor->GetFunction());
 }
 
@@ -90,6 +92,14 @@ Handle<Value> KeyFingerprint::fpGetter(Local<String> property, const AccessorInf
 	}
 
 	return scope.Close(Undefined());
+}
+
+Handle<Value> KeyFingerprint::Forget(const Arguments& args){
+	KeyFingerprint *obj = ObjectWrap::Unwrap<KeyFingerprint>(args.This());
+	Fingerprint *fp = obj->fingerprint_;
+	otrl_context_forget_fingerprint(fp, 1);
+	obj->fingerprint_ = NULL;
+	return Undefined();
 }
 
 }

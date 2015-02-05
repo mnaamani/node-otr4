@@ -46,7 +46,7 @@ class ConnectionCtx : public node::ObjectWrap {
   static v8::Handle<v8::Value> MasterFingerprints(const v8::Arguments& args);
   static v8::Handle<v8::Value> ctxGetter(v8::Local<v8::String> property, const v8::AccessorInfo& info);
   static void ctxSetter(v8::Local<v8::String> property, v8::Local<v8::Value> value, const v8::AccessorInfo& info);
-
+  static v8::Handle<v8::Value> Forget(const v8::Arguments& args);
 
 };
 

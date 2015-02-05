@@ -44,7 +44,7 @@ class KeyFingerprint : public node::ObjectWrap {
   static v8::Handle<v8::Value> WrapKeyFingerprint(Fingerprint *fp);
   static v8::Handle<v8::Value> fpGetter(v8::Local<v8::String> property, const v8::AccessorInfo& info);
   static void fpSetter(v8::Local<v8::String> property, v8::Local<v8::Value> value, const v8::AccessorInfo& info);
-
+  static v8::Handle<v8::Value>Forget(const v8::Arguments& args);
 
 };
 
