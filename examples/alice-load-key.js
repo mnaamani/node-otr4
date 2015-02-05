@@ -23,7 +23,7 @@ var user2 = new otr.User({
 	instags: __dirname
 });
 
-var json_key = JSON.parse(fs.readFileSync("./alice-xmpp-key.json"));
+var json_key = JSON.parse(fs.readFileSync("./alice-key.json"));
 
 account = user2.account("alice", "xmpp");
 
