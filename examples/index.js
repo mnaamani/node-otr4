@@ -298,7 +298,9 @@ function exit_test(msg, TEST_PASSED) {
 	process.exit();
 }
 
-function dumpConnContext(session, msg) {}
+function dumpConnContext(session, msg) {
+console.log(session.context);
+}
 
 function dumpFingerprints(fingerprints) {
 	console.log("dumping fingerprints...");
