@@ -47,7 +47,7 @@ void KeyFingerprint::Init(Handle<Object> target) {
   constructor->SetClassName(name);
 
   // Prototype
-  NODE_SET_PROTOTYPE_ACCESSOR(constructor, "human_", fpGetter,fpSetter);
+  NODE_SET_PROTOTYPE_ACCESSOR(constructor, "human_", fpGetter,NULL);
   NODE_SET_PROTOTYPE_ACCESSOR(constructor, "trust_", fpGetter,fpSetter);
 
   NODE_SET_PROTOTYPE_METHOD(constructor, "forget",Forget);
@@ -71,27 +71,36 @@ v8::Handle<v8::Value> KeyFingerprint::WrapKeyFingerprint(Fingerprint *fp){
 }
 
 void KeyFingerprint::fpSetter(Local<String> property, Local<Value> value, const AccessorInfo& info) {
+	KeyFingerprint* obj = node::ObjectWrap::Unwrap<KeyFingerprint>(info.This());
+	Fingerprint *fp = obj->fingerprint_;
+	if(!fp) return;
+
+	std::string prop = cvv8::CastFromJS<std::string>(property);
+	String::Utf8Value newTrust(value->ToString());
+
+	IfStrEqual(prop,"trust_"){
+		otrl_context_set_trust(fp,(const char*)*newTrust);
+	}
 }
 
 Handle<Value> KeyFingerprint::fpGetter(Local<String> property, const AccessorInfo& info) {
-	HandleScope scope;
 	KeyFingerprint* obj = node::ObjectWrap::Unwrap<KeyFingerprint>(info.This());
 	Fingerprint *fp = obj->fingerprint_;
-	if(!fp) return scope.Close(Undefined());
+	if(!fp) return Undefined();
 
 	std::string prop = cvv8::CastFromJS<std::string>(property);
 
 	IfStrEqual(prop,"human_"){
 		char human[45];
 		otrl_privkey_hash_to_human(human, fp->fingerprint);
-		return scope.Close(String::New(human));
+		return String::New(human);
 	}
 	IfStrEqual(prop,"trust_"){
-		if(fp->trust == NULL) return scope.Close(Undefined());
-		return scope.Close(String::New(fp->trust));
+		if(fp->trust == NULL) return Undefined();
+		return String::New(fp->trust);
 	}
 
-	return scope.Close(Undefined());
+	return Undefined();
 }
 
 Handle<Value> KeyFingerprint::Forget(const Arguments& args){
