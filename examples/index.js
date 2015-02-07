@@ -122,7 +122,7 @@ session_b.on("create_instag", function (a, p) {
 session_a.on("gone_secure", function () {
 	debug("[Alice] Encrypted Connection Established - Gone Secure.");
 });
-session_a.on("gone_secure", function () {
+session_b.on("gone_secure", function () {
 	debug("[Bob] Encrypted Connection Established - Gone Secure.");
 });
 
