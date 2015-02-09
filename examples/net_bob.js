@@ -55,6 +55,7 @@ conn.on("data", function (data) {
 });
 
 conn.on("end", function () {
+	session.destroy();
 	process.exit();
 });
 
