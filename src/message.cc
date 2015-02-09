@@ -254,7 +254,7 @@ void MessageAppOps::notifyRemoteDisconnected(MessageAppOps* ops, ConnContext *co
 	eobj->Set(String::NewSymbol("protocol"), String::New(context->protocol));
 	eobj->Set(String::NewSymbol("context"), ConnectionCtx::WrapConnectionCtx(context) );
 
-	QueEvent(eobj,ops->ui_event_);
+	SyncEvent(eobj,ops->ui_event_);
 }
 
 void MessageAppOps::notifySMPResult(MessageAppOps* ops, ConnContext *context,const char* result){
@@ -265,7 +265,7 @@ void MessageAppOps::notifySMPResult(MessageAppOps* ops, ConnContext *context,con
 	eobj->Set(String::NewSymbol("protocol"), String::New(context->protocol));
 	eobj->Set(String::NewSymbol("context"), ConnectionCtx::WrapConnectionCtx(context) );
 
-	QueEvent(eobj,ops->ui_event_);
+	SyncEvent(eobj,ops->ui_event_);
 }
 void MessageAppOps::notifyIncomingSMPRequest(MessageAppOps* ops, ConnContext *context, char* question){
 	Local<Object> eobj = Object::New();
@@ -281,7 +281,7 @@ void MessageAppOps::notifyIncomingSMPRequest(MessageAppOps* ops, ConnContext *co
 		eobj->Set(String::NewSymbol("question"),String::New(question));
 	}
 
-	QueEvent(eobj,ops->ui_event_);
+	SyncEvent(eobj,ops->ui_event_);
 }
 
 Handle<Value> MessageAppOps::Disconnect(const Arguments& args) {
@@ -452,7 +452,7 @@ void MessageAppOps::op_inject_message(void *opdata, const char *accountname, con
 	eobj->Set(String::NewSymbol("username"), String::New(recipient));
 	eobj->Set(String::NewSymbol("message"), String::New(message));
 
-	QueEvent(eobj,ops->ui_event_);
+	SyncEvent(eobj,ops->ui_event_);
 }
 
 void MessageAppOps::op_update_context_list(void *opdata){
@@ -461,7 +461,7 @@ void MessageAppOps::op_update_context_list(void *opdata){
 	Local<Object> eobj = Object::New();
 	eobj->Set(String::NewSymbol("EVENT"),String::New("update_context_list"));
 
-	QueEvent(eobj,ops->ui_event_);
+	SyncEvent(eobj,ops->ui_event_);
 }
 
 void MessageAppOps::op_new_fingerprint(void *opdata, OtrlUserState us,	const char *accountname, const char *protocol, const char *username, unsigned char fingerprint[20]){
@@ -558,7 +558,7 @@ void MessageAppOps::op_received_symkey(void *opdata, ConnContext *context,
 	eobj->Set(String::NewSymbol("key"), actualBuffer_key);
 	eobj->Set(String::NewSymbol("context"), ConnectionCtx::WrapConnectionCtx(context) );
 
-	QueEvent(eobj,ops->ui_event_);
+	SyncEvent(eobj,ops->ui_event_);
 }
 
 const char * MessageAppOps::op_otr_error_message(void *opdata, ConnContext *context, OtrlErrorCode err_code){
@@ -613,7 +613,7 @@ void MessageAppOps::op_handle_msg_event(void *opdata, OtrlMessageEvent msg_event
 	eobj->Set(String::NewSymbol("message"), message == NULL ? Undefined():String::New(message));
 	eobj->Set(String::NewSymbol("err"), err == 0 ? Undefined():String::New(gcry_strerror(err)));
 
-	QueEvent(eobj,ops->ui_event_);
+	SyncEvent(eobj,ops->ui_event_);
 }
 
 void MessageAppOps::op_create_instag(void *opdata, const char *accountname,
@@ -639,8 +639,7 @@ void MessageAppOps::contextSecureStatusUpdate(void *opdata, ConnContext* context
 	eobj->Set(String::NewSymbol("protocol"), String::New(context->protocol));
 	eobj->Set(String::NewSymbol("context"), ConnectionCtx::WrapConnectionCtx(context) );
 
-	QueEvent(eobj,ops->ui_event_);
-
+	SyncEvent(eobj,ops->ui_event_);
 }
 
 void MessageAppOps::SyncEvent(Local<Object> obj, Persistent<Function> callback){
