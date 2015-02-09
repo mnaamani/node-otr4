@@ -1,9 +1,4 @@
-if (typeof exports !== 'undefined') {
-	var async = require("async");
-	var OTR = require("../index.js");
-}
-
-var otr = OTR;
+var otr = require("../index.js");
 var document = document || {};
 
 var FORCE_SMP = false;
@@ -79,28 +74,14 @@ var session_b = ALICE.openSession({
 });
 
 
-var NET_QUEUE_A = async.queue(handle_messages, 1);
-var NET_QUEUE_B = async.queue(handle_messages, 1);
-
-function handle_messages(O, callback) {
-	O.session.recv(O.msg);
-	callback();
-}
-
 //simulate a network connection between two parties
 session_a.on("inject_message", function (msg) {
 	debug("ALICE:", msg);
-	NET_QUEUE_A.push({
-		session: session_b,
-		msg: msg
-	});
+	session_b.recv(msg);
 });
 session_b.on("inject_message", function (msg) {
 	debug("BOB:", msg);
-	NET_QUEUE_B.push({
-		session: session_a,
-		msg: msg
-	});
+	session_a.recv(msg);
 });
 
 session_a.on("create_privkey", function (a, p) {
@@ -176,24 +157,11 @@ session_b.on("received_symkey", function (use, usedata, key) {
 
 session_a.on("write_fingerprints", function () {
 	alice.writeFingerprints();
-	try {
-		debug("Saving Bob's fingerprint");
-		alice.saveFingerprintsToFS("./alice.fp");
-	} catch (e) {
-		debug("not saving fingerprints.. in browser");
-	}
 	dumpFingerprints(BOB.fingerprints());
 });
 
 session_b.on("write_fingerprints", function () {
 	bob.writeFingerprints();
-	try {
-		debug("Saving Alice's fingerprint");
-		bob.saveFingerprintsToFS("./bob.fp");
-	} catch (e) {
-		debug("not saving fingerprints.. in browser");
-	}
-
 	dumpFingerprints(ALICE.fingerprints());
 });
 
@@ -299,7 +267,7 @@ function exit_test(msg, TEST_PASSED) {
 }
 
 function dumpConnContext(session, msg) {
-console.log(session.context);
+	console.log(session.context);
 }
 
 function dumpFingerprints(fingerprints) {
