@@ -405,7 +405,7 @@ OtrlPolicy MessageAppOps::op_policy(void *opdata, ConnContext *context){
 		node::FatalException(try_catch);
 	}
 
-	if(!result->IsNumber()) return OTRL_POLICY_ALWAYS;
+	if(!result->IsNumber()) return OTRL_POLICY_DEFAULT;
 
 	return (OtrlPolicy)((unsigned int)result->NumberValue());
 }
@@ -438,7 +438,7 @@ int MessageAppOps::op_is_logged_in(void *opdata, const char *accountname,const c
 		node::FatalException(try_catch);
 	}
 
-	if(!result->IsNumber()) return 0;
+	if(!result->IsNumber()) return 1;
 	return (int)result->NumberValue();
 }
 
