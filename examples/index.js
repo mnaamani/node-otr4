@@ -226,8 +226,9 @@ var loop = setInterval(function () {
 			'use': 1000,
 			'usedata': 'ftp://website.net/files.tgz'
 		};
-		SYMKEY_TEST_VALUES.key = ab2str(session_a.extraSymKey(
-			SYMKEY_TEST_VALUES.use, SYMKEY_TEST_VALUES.usedata));
+		session_a.extraSymKey(SYMKEY_TEST_VALUES.use, SYMKEY_TEST_VALUES.usedata, function (key) {
+			SYMKEY_TEST_VALUES.key = ab2str(key);
+		});
 		return;
 	}
 
