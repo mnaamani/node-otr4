@@ -5,6 +5,8 @@ Supports only versions **v4.0.0** and above of the library.
 
 Tested on Debian/Ubuntu and Mac OS X
 
+Doesn't yet work in node v0.12
+
 ### Install pre-requisits
 
 	npm install -g node-gyp
