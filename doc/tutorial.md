@@ -71,7 +71,7 @@ Once we have a Contact object we can setup an OTR conversation, using the **open
 
 ### Sessions
 
-A session is an event emitter. The first thing todo is to hookup the session to the underlying network connection/socket/xmpp trnasport.
+A session is an event emitter. The first thing todo is to hookup the session to the underlying network connection/socket/xmpp transport.
 Lets assume we have established a TCP socket **"client"** to our contact:
 
 	var net = require('net');
